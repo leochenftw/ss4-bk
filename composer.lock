@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bfa4cd51d11f8e45720774ef470fcb4",
+    "content-hash": "268564920686c777ac7830d3bd343543",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -234,6 +234,209 @@
                 "twitter cards"
             ],
             "time": "2018-06-18T21:12:45+00:00"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php",
+            "version": "8.9.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+                "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
+                "reference": "b906325b1bcf99309bc10bff7cbdc1ed8fbcf774",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "giggsey/locale": "^1.2",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "^1.0",
+                "pear/versioncontrol_git": "^0.5",
+                "phing/phing": "^2.7",
+                "php-coveralls/php-coveralls": "^1.0|^2.0",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "symfony/console": "^2.8|^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "8.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "libphonenumber\\": "src/"
+                },
+                "exclude-from-classmap": [
+                    "/src/data/",
+                    "/src/carrier/data/",
+                    "/src/geocoding/data/",
+                    "/src/timezone/data/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "https://giggsey.com/"
+                }
+            ],
+            "description": "PHP Port of Google's libphonenumber",
+            "homepage": "https://github.com/giggsey/libphonenumber-for-php",
+            "keywords": [
+                "geocoding",
+                "geolocation",
+                "libphonenumber",
+                "mobile",
+                "phonenumber",
+                "validation"
+            ],
+            "time": "2018-08-23T10:23:25+00:00"
+        },
+        {
+            "name": "giggsey/locale",
+            "version": "1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/Locale.git",
+                "reference": "3c9cc23c15851c54cb3ccd41a00fd4b5a89feeff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/Locale/zipball/3c9cc23c15851c54cb3ccd41a00fd4b5a89feeff",
+                "reference": "3c9cc23c15851c54cb3ccd41a00fd4b5a89feeff",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "pear/pear-core-minimal": "^1.9",
+                "pear/pear_exception": "^1.0",
+                "pear/versioncontrol_git": "^0.5",
+                "phing/phing": "~2.7",
+                "phpunit/phpunit": "^4.8|^5.0",
+                "satooshi/php-coveralls": "^1.0",
+                "symfony/console": "^2.8|^3.0|^4.0",
+                "symfony/filesystem": "^2.8|^3.0|^4.0",
+                "symfony/finder": "^2.8|^3.0|^4.0",
+                "symfony/process": "^2.8|^3.0|^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Giggsey\\Locale\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joshua Gigg",
+                    "email": "giggsey@gmail.com",
+                    "homepage": "http://giggsey.com/"
+                }
+            ],
+            "description": "Locale functions required by libphonenumber-for-php",
+            "time": "2018-04-03T15:53:12+00:00"
+        },
+        {
+            "name": "gorriecoe/silverstripe-link",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gorriecoe/silverstripe-link.git",
+                "reference": "f7425e18e14e90c7c9d4d56e8c8aa096622eaebb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gorriecoe/silverstripe-link/zipball/f7425e18e14e90c7c9d4d56e8c8aa096622eaebb",
+                "reference": "f7425e18e14e90c7c9d4d56e8c8aa096622eaebb",
+                "shasum": ""
+            },
+            "require": {
+                "giggsey/libphonenumber-for-php": "^8.0",
+                "silverstripe/framework": "^4",
+                "unclecheese/display-logic": "^2"
+            },
+            "type": "silverstripe-vendormodule",
+            "extra": {
+                "installer-name": "link"
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Gorrie Coe",
+                    "email": "gorriecoe@gmail.com"
+                }
+            ],
+            "description": "Adds a Link Object that can be link to a URL, Email, Phone number, an internal Page or File.",
+            "homepage": "http://github.com/gorriecoe/silverstripe-link",
+            "keywords": [
+                "link",
+                "silverstripe"
+            ],
+            "time": "2018-08-09T21:11:41+00:00"
+        },
+        {
+            "name": "gorriecoe/silverstripe-linkfield",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gorriecoe/silverstripe-linkfield.git",
+                "reference": "de3b7877648bfc4c14eb2853c4d898e6354b2a1f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gorriecoe/silverstripe-linkfield/zipball/de3b7877648bfc4c14eb2853c4d898e6354b2a1f",
+                "reference": "de3b7877648bfc4c14eb2853c4d898e6354b2a1f",
+                "shasum": ""
+            },
+            "require": {
+                "gorriecoe/silverstripe-link": "^1.0",
+                "silvershop/silverstripe-hasonefield": "^2.0"
+            },
+            "type": "silverstripe-vendormodule",
+            "extra": {
+                "installer-name": "linkfield",
+                "expose": [
+                    "client/dist"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Gorrie Coe",
+                    "email": "gorriecoe@gmail.com"
+                }
+            ],
+            "description": "Adds a Linkfield for gorriecoe/silverstripe-link",
+            "homepage": "http://github.com/gorriecoe/silverstripe-linkfield",
+            "keywords": [
+                "cms",
+                "link",
+                "modular",
+                "silverstripe"
+            ],
+            "time": "2018-07-15T21:40:08+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -1072,6 +1275,92 @@
                 "simple-cache"
             ],
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "salted-herring/salted-cropper",
+            "version": "dev-feature/ss4-upgrade",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/salted-herring/salted-cropper.git",
+                "reference": "b56e2318afdc066ddae1a505514164729f7856aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/salted-herring/salted-cropper/zipball/b56e2318afdc066ddae1a505514164729f7856aa",
+                "reference": "b56e2318afdc066ddae1a505514164729f7856aa",
+                "shasum": ""
+            },
+            "require": {
+                "silverstripe/framework": "^4.0"
+            },
+            "type": "silverstripe-vendormodule",
+            "extra": {
+                "expose": [
+                    "client/css",
+                    "client/js"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Salted Herring",
+                    "homepage": "http://saltedherring.com"
+                }
+            ],
+            "description": "Salted Herring's Image Cropper Field",
+            "homepage": "https://github.com/salted-herring/salted-library",
+            "keywords": [
+                "cropper tool",
+                "cropperjs",
+                "image cropper",
+                "silverstripe image cropper"
+            ],
+            "time": "2018-08-27T04:04:49+00:00"
+        },
+        {
+            "name": "silvershop/silverstripe-hasonefield",
+            "version": "2.0-alpha2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silvershop/silverstripe-hasonefield.git",
+                "reference": "d5820c2b27cf4afb9d7b509d8c6cb8ed97633c86"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silvershop/silverstripe-hasonefield/zipball/d5820c2b27cf4afb9d7b509d8c6cb8ed97633c86",
+                "reference": "d5820c2b27cf4afb9d7b509d8c6cb8ed97633c86",
+                "shasum": ""
+            },
+            "require": {
+                "silverstripe/framework": "^4.0",
+                "silverstripe/vendor-plugin": "^1.0"
+            },
+            "type": "silverstripe-vendormodule",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SilverShop\\HasOneField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-2-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Shipman",
+                    "email": "jeremy@burnbright.net"
+                }
+            ],
+            "description": "Edit a has_one relationship using the gridfield editor, triggered by clicking a button.",
+            "time": "2018-02-05T10:43:42+00:00"
         },
         {
             "name": "silverstripe-themes/simple",
@@ -2780,6 +3069,66 @@
             "time": "2018-08-10T07:34:36+00:00"
         },
         {
+            "name": "unclecheese/display-logic",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/unclecheese/silverstripe-display-logic.git",
+                "reference": "e52178a2b2de60483e25ed167086d0b54007d819"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/unclecheese/silverstripe-display-logic/zipball/e52178a2b2de60483e25ed167086d0b54007d819",
+                "reference": "e52178a2b2de60483e25ed167086d0b54007d819",
+                "shasum": ""
+            },
+            "require": {
+                "silverstripe/framework": "^4.0"
+            },
+            "replace": {
+                "silverstripe/display-logic": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7",
+                "se/selenium-server-standalone": "2.41.0",
+                "silverstripe/behat-extension": "^3@dev",
+                "silverstripe/serve": "^2"
+            },
+            "type": "silverstripe-vendormodule",
+            "extra": {
+                "installer-name": "display-logic",
+                "expose": [
+                    "client"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "UncleCheese\\DisplayLogic\\": "src/",
+                    "UncleCheese\\DisplayLogic\\Tests\\": "tests/php/",
+                    "UncleCheese\\DisplayLogic\\Tests\\Behaviour\\": "tests/behat/src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Uncle Cheese",
+                    "email": "unclecheese@leftandmain.com"
+                }
+            ],
+            "description": "Allows assignment of conditions for display and hide of specific form fields based on client side behavior.",
+            "keywords": [
+                "Forms",
+                "cms",
+                "display",
+                "logic",
+                "silverstripe"
+            ],
+            "time": "2018-02-26T22:11:35+00:00"
+        },
+        {
             "name": "undefinedoffset/sortablegridfield",
             "version": "2.0.6",
             "source": {
@@ -4208,7 +4557,9 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "silverstripe/recipe-cms": 0,
-        "silverstripe/lumberjack": 20
+        "silverstripe/lumberjack": 20,
+        "salted-herring/salted-cropper": 20,
+        "gorriecoe/silverstripe-linkfield": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
