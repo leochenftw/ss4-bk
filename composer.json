@@ -16,6 +16,7 @@
         "silverstripe/lumberjack": "dev-master",
         "salted-herring/salted-cropper": "dev-feature/ss4-upgrade",
         "gorriecoe/silverstripe-link": "^1.2",
+        "guzzlehttp/guzzle": "^6.3",
         "gorriecoe/silverstripe-linkfield": "dev-master"
     },
     "require-dev": {
