@@ -7,6 +7,7 @@ use \SilverStripe\Forms\GridField\GridFieldConfig_Base;
 use \SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use \SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use \SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
+use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 
 class Grid
 {
@@ -40,11 +41,10 @@ class Grid
             $config =   GridFieldConfig_RelationEditor::create();
         }
 
-        // if ($sortable) {
-        //     $config->addComponents(
-        //         $sortable = new GridFieldOrderableRows('SortOrder')
-        //     );
-        // }
+        if ($sortable) {
+            $config->addComponent($sortable = new GridFieldSortableRows('Sort'));
+            $sortable->setUpdateVersionedStage('Live');
+        }
 
         $grid->setConfig($config);
         return $grid;
