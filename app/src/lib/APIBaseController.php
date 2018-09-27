@@ -46,13 +46,22 @@ class APIBaseController extends Controller
             $allowed    =   static::$allowed_request_methods[$method];
 
             if (is_bool($allowed)) {
-                return $allowed;
+                if ($allowed) {
+                    return true;
+                }
+
+                return $this->httpError(400, 'method does not allowed');
             }
 
             $allowed    =   str_replace('->', '', $allowed);
 
             if (method_exists($this, $allowed)) {
-                return $this->$allowed();
+
+                if ($this->$allowed()) {
+                    return true;
+                }
+
+                return $this->httpError(400, 'method does not allowed');
             }
 
             return $this->httpError(400, 'method does not exist');
