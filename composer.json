@@ -12,7 +12,6 @@
         "silverstripe/recipe-plugin": "^1",
         "silverstripe/googlesitemaps": "dev-master",
         "silverstripe/recipe-cms": "^4.2.0@stable",
-        "wilr/silverstripe-googlesitemaps": "^2.1",
         "silverstripe/html5": "^2.0.0",
         "symbiote/silverstripe-gridfieldextensions": "^3",
         "undefinedoffset/sortablegridfield": "^2",
