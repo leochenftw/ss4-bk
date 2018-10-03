@@ -31,7 +31,12 @@
             "app/_config.php",
             "app/_config/mysite.yml",
             "app/code/Page.php",
-            "app/code/PageController.php"
+            "app/code/PageController.php",
+            "mysite/.htaccess",
+            "mysite/_config.php",
+            "mysite/_config/mysite.yml",
+            "mysite/code/Page.php",
+            "mysite/code/PageController.php"
         ],
         "public-files-installed": [
             ".htaccess",
