@@ -14,3 +14,12 @@ SilverStripe\CMS\Model\SiteTree:
   extensions:
     - App\Web\Extensions\MetaExtension
     - App\Web\Extensions\SocialTagExtension
+
+SilverStripe\Assets\Flysystem\AssetAdapter:
+  file_permissions:
+    file:
+      public: 0775
+      private: 0775
+    dir:
+      public: 0775
+      private: 0775
