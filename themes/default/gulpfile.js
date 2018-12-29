@@ -35,14 +35,7 @@ var sassOptions = {
     sourceMap: true,
     importer: moduleImporter(),
     includePaths: [
-        './node_modules/normalize-scss/sass',
-        './node_modules/breakpoint-sass/stylesheets',
-        './node_modules/sass-font-awesome',
-        './node_modules/hamburgers/_sass',
-        './node_modules/bulma',
-        './node_modules/owl.carousel/src/scss',
-        './node_modules/animate.css',
-        './node_modules/accordion/src/accordion.css'
+        './node_modules/bulma'
     ]
 }
 
