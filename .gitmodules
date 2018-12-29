@@ -1,3 +1,0 @@
-[submodule "themes/default/scss/bulma"]
-	path = themes/default/scss/bulma
-	url = git@github.com:leochenftw/bulma-scss.git
