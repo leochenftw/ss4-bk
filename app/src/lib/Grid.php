@@ -35,6 +35,8 @@ class Grid
 
         if ($gridHeaderType == 'GridFieldConfig_RecordEditor') {
             $config =   GridFieldConfig_RecordEditor::create();
+            $delete = $config->getComponentByType('SilverStripe\Forms\GridField\GridFieldDeleteAction');
+            $delete->setRemoveRelation(false);
         }
 
         if ($gridHeaderType == 'GridFieldConfig_RelationEditor') {
