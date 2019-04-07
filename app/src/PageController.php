@@ -3,11 +3,14 @@
 namespace {
 
     use SilverStripe\CMS\Controllers\ContentController;
-    use SilverStripe\Control\Director;
+    use SilverStripe\Core\Config\Config;
     use SilverStripe\Core\Convert;
+    use SilverStripe\Control\HTTPRequest;
     use SilverStripe\SiteConfig\SiteConfig;
     use SilverStripe\View\ArrayData;
     use SilverStripe\View\Requirements;
+    use SilverStripe\Control\Director;
+    use Leochenftw\Debugger;
 
     class PageController extends ContentController
     {
@@ -27,6 +30,28 @@ namespace {
          * @var array
          */
         private static $allowed_actions = [];
+
+        public function index(HTTPRequest $request)
+        {
+            // check for CORS options request
+            if ($this->request->httpMethod() === 'OPTIONS' ) {
+                // create direct response without requesting any controller
+                $response   =   $this->getResponse();
+                // set CORS header from config
+                $response   =   $this->addCORSHeaders($response);
+                $response->output();
+                exit;
+            }
+
+            $header     =   $this->getResponse();
+
+            if ($this->request->isAjax()) {
+                $this->addCORSHeaders($header);
+                return json_encode($this->getData());
+            }
+
+            return $this->renderWith([$this->ClassName, 'Page']);
+        }
 
         protected function init()
         {
@@ -116,6 +141,31 @@ namespace {
             }
 
             return null;
+        }
+
+        protected function addCORSHeaders($response)
+        {
+            $config             =   Config::inst()->get('Leochenftw\Restful\RestfulController');
+
+            $default_origin     =   $config['CORSOrigin'];
+            $allowed_origins    =   $config['CORSOrigins'];
+
+            if (in_array($this->request->getHeader('origin'), $allowed_origins)) {
+                $response->addHeader('Access-Control-Allow-Origin', $this->request->getHeader('origin'));
+            } else {
+                $response->addHeader('Access-Control-Allow-Origin', $default_origin);
+            }
+
+            $response->addHeader('Access-Control-Allow-Methods', $config['CORSMethods']);
+            $response->addHeader('Access-Control-Max-Age', $config['CORSMaxAge']);
+            $response->addHeader('Access-Control-Allow-Headers', $config['CORSAllowHeaders']);
+            if ($config['CORSAllowCredentials']) {
+                $response->addHeader('Access-Control-Allow-Credentials', 'true');
+            }
+
+            $response->addHeader('Content-Type', 'application/json');
+
+            return $response;
         }
     }
 }

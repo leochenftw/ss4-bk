@@ -6,9 +6,7 @@
  * Allows can CRUD functions.
  *
  * */
-namespace App\Web\Extensions;
-
-use App\Web\Extensions\CanCRUD;
+namespace App\Web\Extension;
 
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
@@ -24,7 +22,7 @@ class CanCRUD implements PermissionProvider
         $permissions = [];
         $permission_codes = Config::inst()->get($className, 'PermissionCode');
         $classes = Config::inst()->get($className, 'Permissions');
-        
+
         if (!empty($classes)) {
             foreach ($classes as $className) {
                 $shortName = ClassInfo::shortName($className);

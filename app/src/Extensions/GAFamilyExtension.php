@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Web\Extensions;
+namespace App\Web\Extension;
 
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\TextareaField;

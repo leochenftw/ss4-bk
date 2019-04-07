@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Web\Extensions;
+namespace App\Web\Extension;
 
 use SilverStripe\ORM\DataExtension;
 
@@ -11,5 +11,5 @@ use SilverStripe\ORM\DataExtension;
  */
 class SiteConfigExtension extends DataExtension
 {
-    
+
 }

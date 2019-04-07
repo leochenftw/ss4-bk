@@ -6,7 +6,7 @@
  * Provides CRUD can functions.
  *
  * */
-namespace App\Web\Extensions;
+namespace App\Web\Extension;
 
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataExtension;

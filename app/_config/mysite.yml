@@ -6,14 +6,14 @@ SilverStripe\Core\Manifest\ModuleManifest:
 
 SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - App\Web\Extensions\SiteConfigExtension
-    - App\Web\Extensions\GAFamilyExtension
-    - App\Web\Extensions\SocialTagExtension
+    - App\Web\Extension\SiteConfigExtension
+    - App\Web\Extension\GAFamilyExtension
+    - App\Web\Extension\SocialTagExtension
 
 SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - App\Web\Extensions\MetaExtension
-    - App\Web\Extensions\SocialTagExtension
+    - App\Web\Extension\MetaExtension
+    - App\Web\Extension\SocialTagExtension
 
 SilverStripe\Assets\Flysystem\AssetAdapter:
   file_permissions:
@@ -23,3 +23,25 @@ SilverStripe\Assets\Flysystem\AssetAdapter:
     dir:
       public: 0775
       private: 0775
+
+SilverStripe\Core\Injector\Injector:
+  Psr\Log\LoggerInterface:
+    calls:
+      LogFileHandler: [ pushHandler, [ %$LogFileHandler ] ]
+  LogFileHandler:
+    class: Monolog\Handler\StreamHandler
+    constructor:
+      - "../silverstripe.log"
+      - "info"
+  # Psr\SimpleCache\CacheInterface.MODEL_NAME:
+  #   factory: SilverStripe\Core\Cache\CacheFactory
+  #   constructor:
+  #     namespace: "MODEL_NAME"
+
+SilverStripe\ORM\DataList:
+  extensions:
+    - App\Web\Extension\DataListExtension
+
+SilverStripe\ORM\ArrayList:
+  extensions:
+    - App\Web\Extension\DataListExtension
