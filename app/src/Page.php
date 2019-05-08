@@ -42,18 +42,24 @@ namespace {
             return $fields;
         }
 
-        public function getData()
+        public function getData($mini = false)
         {
+            if ($mini) {
+                return  [
+                    'id'        =>  $this->ID,
+                    'title'     =>  $this->Title,
+                    'link'      =>  $this->Link() == '/' ? '/' : rtrim($this->Link(), '/')
+                ];
+            }
+
             $siteconfig =   SiteConfig::current_site_config();
             return [
                 'id'            =>  $this->ID,
-                'siteconfig'    =>  [
-                    'sitename'  =>  $siteconfig->Title,
-                ],
+                'siteconfig'    =>  $siteconfig->getData(),
                 'navigation'    =>  $this->get_menu_items(),
                 'title'         =>  $this->Title,
-                'content'       =>  $this->get_content_data(),
-                'pagetype'      =>  $this->get_type($this->ClassName),
+                'content'       =>  Util::preprocess_content($this->Content),
+                'pagetype'      =>  strtolower($this->get_type($this->ClassName)),
                 'ancestors'     =>  $this->get_ancestors($this)
             ];
         }
@@ -98,9 +104,7 @@ namespace {
                     'label'     =>  $item->Title,
                     'url'       =>  $link != '/' ? rtrim($link, '/') : '/',
                     'active'    =>  $item->isSection() || $item->isCurrent(),
-                    'sub'       =>  $this->get_type($item->ClassName) == 'ScriptCategoryPage' || $this->get_type($item->ClassName) == 'AuthorLanding' ?
-                                    [] :
-                                    $this->get_menu_items($item->Children()),
+                    'sub'       =>  $this->get_menu_items($item->Children()),
                     'pagetype'  =>  $this->get_type($item->ClassName)
                 ];
             }

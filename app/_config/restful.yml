@@ -46,6 +46,8 @@ Only:
   environment: 'live'
 ---
 Leochenftw\Restful\RestfulController:
-  CORSOrigin: 'https://www.isnz.org.nz'
+  CORSOrigin: 'https://www.cita.org.nz'
   CORSOrigins:
-    - 'https://isnz.org.nz'
+    - 'https://cita.org.nz'
+    - 'https://cita.nz'
+    - 'https://www.cita.nz'
