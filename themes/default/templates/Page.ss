@@ -31,6 +31,19 @@
 
     $SiteConfig.GoogleAnalyticsCode.RAW
     $SiteConfig.GTMHead.RAW
+
+    <script type="text/javascript">
+        var path    =   location.pathname;
+        if (path.indexOf('/admin') != 0 &&
+            path.indexOf('/dev/') != 0 &&
+            path.indexOf('/!') != 0 &&
+            path.indexOf('/assets/') != 0 &&
+            path.indexOf('/Security/') != 0 &&
+            path.indexOf('/!') != 0 &&
+            location.search.indexOf('?flush') != 0) {
+            // location.replace('/!/#' + path);
+        }
+    </script>
 </head>
 <body class="$ClassName.ShortName.LowerCase" <% if $i18nScriptDirection %>dir="$i18nScriptDirection"<% end_if %>>
 $SiteConfig.GTMBody.RAW
@@ -39,6 +52,6 @@ $SiteConfig.GTMBody.RAW
     $Layout
 </main>
 <% include Footer %>
-<script src="$ThemeDir/dist/main.min.js" defer></script>
+<%-- <script src="$ThemeDir/main.js" defer></script> --%>
 </body>
 </html>

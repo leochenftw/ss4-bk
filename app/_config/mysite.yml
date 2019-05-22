@@ -12,8 +12,13 @@ SilverStripe\SiteConfig\SiteConfig:
 
 SilverStripe\CMS\Model\SiteTree:
   extensions:
+    - App\Web\Extension\SearchableExtension
     - App\Web\Extension\MetaExtension
     - App\Web\Extension\SocialTagExtension
+
+SilverStripe\Security\Member:
+  extensions:
+    - App\Web\Extensions\MemberExtension
 
 SilverStripe\Assets\Flysystem\AssetAdapter:
   file_permissions:
@@ -45,3 +50,16 @@ SilverStripe\ORM\DataList:
 SilverStripe\ORM\ArrayList:
   extensions:
     - App\Web\Extension\DataListExtension
+
+SilverStripe\Assets\File:
+  extensions:
+    - App\Web\Extension\FileExtension
+
+SilverStripe\Control\Email\Email:
+  admin_email: leochenftw@gmail.com
+  noreply_email:
+    noreply@basetwo.co.nz: 'Sitename'
+
+# GoogleAPIs:
+#   reCaptcha:
+#     secret_key:

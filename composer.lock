@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22627587b562db5ef30df4ff02e922b4",
+    "content-hash": "62976d44ac5635ec653a0c89642aa9c6",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -301,17 +301,47 @@
             "time": "2019-02-25T15:07:28+00:00"
         },
         {
-            "name": "giggsey/libphonenumber-for-php",
-            "version": "8.10.11",
+            "name": "gdmedia/ss-auto-git-ignore",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "98f5983a33d704eafea7cc6e1cc2581883a51ddc"
+                "url": "https://github.com/guru-digital/SSAutoGitIgnore.git",
+                "reference": "0fd761b18305aa5c8aa35117d5b5b58cc006815d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/98f5983a33d704eafea7cc6e1cc2581883a51ddc",
-                "reference": "98f5983a33d704eafea7cc6e1cc2581883a51ddc",
+                "url": "https://api.github.com/repos/guru-digital/SSAutoGitIgnore/zipball/0fd761b18305aa5c8aa35117d5b5b58cc006815d",
+                "reference": "0fd761b18305aa5c8aa35117d5b5b58cc006815d",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GDM\\": "./"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Corey Sewell",
+                    "email": "corey@gurudigal.nz"
+                }
+            ],
+            "description": "A Composer post-update-cmd script to automatically add Composer managed SilverStripe modules and themes to .gitignore",
+            "time": "2016-07-27T19:24:49+00:00"
+        },
+        {
+            "name": "giggsey/libphonenumber-for-php",
+            "version": "8.10.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/giggsey/libphonenumber-for-php.git",
+                "reference": "6187402b4949ca7edc439ed4a0396922eeb13dfa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/6187402b4949ca7edc439ed4a0396922eeb13dfa",
+                "reference": "6187402b4949ca7edc439ed4a0396922eeb13dfa",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +396,7 @@
                 "phonenumber",
                 "validation"
             ],
-            "time": "2019-04-30T09:55:59+00:00"
+            "time": "2019-05-14T11:30:38+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -862,16 +892,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.51",
+            "version": "1.0.52",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "755ba7bf3fb9031e6581d091db84d78275874396"
+                "reference": "c5a5097156387970e6f0ccfcdf03f752856f3391"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/755ba7bf3fb9031e6581d091db84d78275874396",
-                "reference": "755ba7bf3fb9031e6581d091db84d78275874396",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/c5a5097156387970e6f0ccfcdf03f752856f3391",
+                "reference": "c5a5097156387970e6f0ccfcdf03f752856f3391",
                 "shasum": ""
             },
             "require": {
@@ -942,7 +972,7 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2019-03-30T13:22:34+00:00"
+            "time": "2019-05-20T20:21:14+00:00"
         },
         {
             "name": "littlegiant/silverstripe-seo-editor",
@@ -2147,12 +2177,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wilr/silverstripe-googlesitemaps.git",
-                "reference": "4d131b06accbbd025089f1dd851c9c0564119d6e"
+                "reference": "473b88ee056288b4cd21f39991687c2ddf1e7210"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wilr/silverstripe-googlesitemaps/zipball/4d131b06accbbd025089f1dd851c9c0564119d6e",
-                "reference": "4d131b06accbbd025089f1dd851c9c0564119d6e",
+                "url": "https://api.github.com/repos/wilr/silverstripe-googlesitemaps/zipball/473b88ee056288b4cd21f39991687c2ddf1e7210",
+                "reference": "473b88ee056288b4cd21f39991687c2ddf1e7210",
                 "shasum": ""
             },
             "require": {
@@ -2198,7 +2228,7 @@
                 "seo",
                 "silverstripe"
             ],
-            "time": "2018-09-25T01:25:46+00:00"
+            "time": "2019-05-13T00:09:59+00:00"
         },
         {
             "name": "silverstripe/graphql",
@@ -3432,6 +3462,58 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2019-03-25T07:48:46+00:00"
+        },
+        {
+            "name": "unclecheese/betterbuttons",
+            "version": "dev-feature/ss4-upgrade",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/unclecheese/silverstripe-gridfield-betterbuttons.git",
+                "reference": "9e6e563d1477e2620c79403a9b507b91b5a15b7d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/unclecheese/silverstripe-gridfield-betterbuttons/zipball/9e6e563d1477e2620c79403a9b507b91b5a15b7d",
+                "reference": "9e6e563d1477e2620c79403a9b507b91b5a15b7d",
+                "shasum": ""
+            },
+            "require": {
+                "silverstripe/framework": "^4.0@dev"
+            },
+            "type": "silverstripe-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                },
+                "expose": [
+                    "css",
+                    "images",
+                    "javascript"
+                ]
+            },
+            "autoload": {
+                "psr-4": {
+                    "UncleCheese\\BetterButtons\\": "src/",
+                    "UncleCheese\\BetterButtons\\Tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GNU"
+            ],
+            "authors": [
+                {
+                    "name": "Uncle Cheese",
+                    "email": "unclecheese@leftandmain.com"
+                }
+            ],
+            "description": "Adds new form actions and buttons to GridField detail form for usability enhancements.",
+            "keywords": [
+                "buttons",
+                "gridfield",
+                "silverstripe"
+            ],
+            "time": "2018-04-17T18:50:23+00:00"
         },
         {
             "name": "unclecheese/display-logic",
@@ -4873,7 +4955,8 @@
         "silverstripe/recipe-cms": 0,
         "salted-herring/salted-cropper": 20,
         "silverstripe/segment-field": 20,
-        "gorriecoe/silverstripe-linkfield": 20
+        "gorriecoe/silverstripe-linkfield": 20,
+        "unclecheese/betterbuttons": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

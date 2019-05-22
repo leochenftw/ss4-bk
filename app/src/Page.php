@@ -2,6 +2,8 @@
 
 namespace {
 
+    use SilverStripe\Forms\TextareaField;
+    use SilverStripe\Forms\TextField;
     use SilverStripe\SiteConfig\SiteConfig;
     use SilverStripe\Forms\TabSet;
     use SilverStripe\Forms\Tab;
@@ -10,12 +12,18 @@ namespace {
     use Leochenftw\Util;
     use Leochenftw\Debugger;
     use SilverStripe\Control\Controller;
+    use App\Web\Model\PageHero;
+    use SilverShop\HasOneField\HasOneButtonField;
 
     class Page extends SiteTree
     {
-        private static $db = [];
+        private static $db = [
+            'Excerpt'   =>  'Text'
+        ];
 
-        private static $has_one = [];
+        private static $has_one = [
+            'PageHero'  =>  PageHero::class
+        ];
 
         /**
          * CMS Fields
@@ -29,8 +37,18 @@ namespace {
             $meta   =   $fields->fieldbyName('Root.Main.Metadata');
 
             $fields->removeByName([
-                'Metadata'
+                'Metadata',
+                'PageHeroID'
             ]);
+
+            $fields->addFieldsToTab(
+                'Root.Main',
+                [
+                    TextareaField::create('Excerpt'),
+                    HasOneButtonField::create($this, "PageHero")
+                ],
+                'URLSegment'
+            );
 
             $fields->addFieldToTab(
                 'Root.SEO',
@@ -46,9 +64,9 @@ namespace {
         {
             if ($mini) {
                 return  [
-                    'id'        =>  $this->ID,
-                    'title'     =>  $this->Title,
-                    'link'      =>  $this->Link() == '/' ? '/' : rtrim($this->Link(), '/')
+                    'id'    =>  $this->ID,
+                    'title' =>  $this->Title,
+                    'url'   =>  $this->Link() == '/' ? '/' : rtrim($this->Link(), '/')
                 ];
             }
 
@@ -58,7 +76,10 @@ namespace {
                 'siteconfig'    =>  $siteconfig->getData(),
                 'navigation'    =>  $this->get_menu_items(),
                 'title'         =>  $this->Title,
-                'content'       =>  Util::preprocess_content($this->Content),
+                'menu_title'    =>  $this->MenuTitle,
+                'excerpt'       =>  $this->Excerpt,
+                'hero'          =>  $this->PageHero()->exists() ?
+                                    $this->PageHero()->getData() : null,
                 'pagetype'      =>  strtolower($this->get_type($this->ClassName)),
                 'ancestors'     =>  $this->get_ancestors($this)
             ];
@@ -71,8 +92,9 @@ namespace {
             }
 
             $ancestors[]    =   [
-                'title' =>  $item->Parent()->Title,
-                'link'   =>  $item->Parent()->Link() != '/' ? rtrim($item->Parent()->Link(), '/') : '/'
+                'title'         =>  $item->Parent()->MenuTitle,
+                'menu_title'    =>  $this->Parent()->MenuTitle,
+                'url'           =>  $item->Parent()->Link() != '/' ? rtrim($item->Parent()->Link(), '/') : '/'
             ];
 
             return $this->get_ancestors($item->Parent(), $ancestors);
@@ -101,11 +123,11 @@ namespace {
                 $link   =   $item->Link();
 
                 $list[] =   [
-                    'label'     =>  $item->Title,
+                    'title'     =>  $item->MenuTitle,
                     'url'       =>  $link != '/' ? rtrim($link, '/') : '/',
                     'active'    =>  $item->isSection() || $item->isCurrent(),
                     'sub'       =>  $this->get_menu_items($item->Children()),
-                    'pagetype'  =>  $this->get_type($item->ClassName)
+                    'pagetype'  =>  strtolower($this->get_type($item->ClassName))
                 ];
             }
 

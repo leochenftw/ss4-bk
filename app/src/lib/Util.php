@@ -3,10 +3,37 @@
 namespace Leochenftw;
 use SilverStripe\Security\Member;
 use SilverStripe\Control\Director;
+use SilverStripe\Security\SecurityToken;
 use Page;
 
 class Util
 {
+    public static function check_csrf(&$request)
+    {
+        if (($csrf = static::null_it($this->request->postVar('csrf')))) {
+            return SecurityToken::inst()->getSecurityID() == $csrf;
+        }
+
+        return false;
+    }
+
+    public static function null_it($val)
+    {
+        if ($value == 'null') {
+            return null;
+        }
+
+        if ($value == 'true') {
+            return true;
+        }
+
+        if ($value == 'false') {
+            return false;
+        }
+
+        return $value;
+    }
+
     public static function parse_file_array($input)
     {
         $array      =   [];

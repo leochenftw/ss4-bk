@@ -8,10 +8,11 @@ use \SilverStripe\Forms\GridField\GridFieldConfig_RecordViewer;
 use \SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use \SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 
 class Grid
 {
-    public static function make($name, $label = '', $source = null, $sortable = true, $gridHeaderType = 'GridFieldConfig_RecordEditor')
+    public static function make($name, $label = '', $source = null, $sortable = true, $gridHeaderType = 'GridFieldConfig_RecordEditor', $remove_add_button = false)
     {
         /*
         GridFieldConfig_Base
@@ -35,12 +36,13 @@ class Grid
 
         if ($gridHeaderType == 'GridFieldConfig_RecordEditor') {
             $config =   GridFieldConfig_RecordEditor::create();
-            $delete = $config->getComponentByType('SilverStripe\Forms\GridField\GridFieldDeleteAction');
-            $delete->setRemoveRelation(false);
         }
 
         if ($gridHeaderType == 'GridFieldConfig_RelationEditor') {
             $config =   GridFieldConfig_RelationEditor::create();
+            if ($remove_add_button) {
+                $config->removeComponentsByType($config->getComponentByType(GridFieldAddNewButton::class));
+            }
         }
 
         if ($sortable) {
