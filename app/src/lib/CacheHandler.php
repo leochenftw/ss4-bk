@@ -1,6 +1,6 @@
 <?php
 
-namespace Leochenftw\Utils;
+namespace Leochenftw\Util;
 use Psr\SimpleCache\CacheInterface;
 use SilverStripe\Core\Injector\Injector;
 
