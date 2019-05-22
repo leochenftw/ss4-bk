@@ -8,6 +8,7 @@ class FileExtension extends DataExtension
 {
     public function getData()
     {
+        if (!$this->owner->exists()) return null;
         return [
             'id'    =>  $this->owner->ID,
             'title' =>  $this->owner->Title,
