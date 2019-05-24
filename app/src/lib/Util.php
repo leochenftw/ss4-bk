@@ -406,7 +406,7 @@ class Util
 
             $matches    =   $matches[0];
             foreach ($matches as $match) {
-                $restring   =   str_replace(']', '', str_replace('[image ', '<img ', $match));
+                $restring   =   str_replace(']', ' />', str_replace('[image ', '<img ', $match));
                 $ref        =   $_SERVER['HTTP_REFERER'];
                 if (strpos($ref, 'localhost') !== false) {
                     $restring   =   str_replace('src="', 'src="' . rtrim(Director::absoluteBaseURL(), '/'), $restring);
