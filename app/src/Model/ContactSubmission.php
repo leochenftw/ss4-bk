@@ -3,7 +3,6 @@
 namespace App\Web\Model;
 
 use SilverStripe\ORM\DataObject;
-use UncleCheese\BetterButtons\Actions\CustomAction;
 use Leochenftw\Debugger;
 use App\Web\Email\ContactSubmissionAcknowledgement;
 use App\Web\Email\ContactSubmissionNotice;
@@ -16,10 +15,6 @@ use App\Web\Email\ContactSubmissionNotice;
  */
 class ContactSubmission extends DataObject
 {
-    private static $better_buttons_actions = [
-        'send_email'
-    ];
-
     /**
      * Defines the database table name
      * @var string
@@ -44,29 +39,5 @@ class ContactSubmission extends DataObject
 
         $notice->send();
         $ack->send();
-    }
-
-    public function getBetterButtonsActions()
-    {
-        $fields = parent::getBetterButtonsActions();
-        $fields->removeByName([
-            'action_save'
-        ]);
-
-        if ($this->exists()) {
-            $fields->push(CustomAction::create('send_email', 'Send Email')->setRedirectType(CustomAction::REFRESH));
-        }
-
-        return $fields;
-    }
-
-    public function isPublished()
-    {
-        return true;
-    }
-
-    public function stagesDiffer()
-    {
-        return false;
     }
 }

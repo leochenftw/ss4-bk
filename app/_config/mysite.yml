@@ -63,3 +63,7 @@ SilverStripe\Control\Email\Email:
 # GoogleAPIs:
 #   reCaptcha:
 #     secret_key:
+
+SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
+  extensions:
+    - App\Web\Extension\CustomButtonWorkAround
