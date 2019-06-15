@@ -9,8 +9,6 @@ use SilverStripe\Control\Controller;
 use Leochenftw\Debugger;
 
 use App\Web\Model\ContactSubmission;
-use App\Web\Email\ContactSubmissionAcknowledgement;
-use App\Web\Email\ContactSubmissionNotice;
 
 class CustomButtonWorkAround extends Extension
 {
@@ -43,11 +41,7 @@ class CustomButtonWorkAround extends Extension
     // Make custom actions work
     public function send_email($data, $form)
     {
-        $notice =   ContactSubmissionNotice::create($this->owner->getRecord());
-        $ack    =   ContactSubmissionAcknowledgement::create($this->owner->getRecord());
-
-        $notice->send();
-        $ack->send();
+        $this->owner->getRecord()->send_email();
 
         $form->sessionMessage('Sent', 'good', ValidationResult::CAST_HTML);
         return Controller::curr()->redirectBack();
