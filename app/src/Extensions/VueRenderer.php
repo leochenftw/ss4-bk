@@ -14,22 +14,31 @@ use Page;
 
 class VueRenderer extends Extension
 {
-    public function render_vue_html($www_user = null, $www_group = null)
+    public function render_vue_html($www_user = null, $www_group = null, $form = null)
     {
         $record =   $this->owner;
         if ($record->isPublished()) {
             $siteconfig =   SiteConfig::current_site_config();
             $dir    =   Config::inst()->get(VueRenderExtension::class, 'dist_path');
             if (!$dir) {
+                if ($form) {
+                    $form->sessionMessage('Please set your "dist_path" in the yml file first!', 'bad');
+                }
                 throw new Exception('Please set your "dist_path" in the yml file first!');
             }
 
             $index  =   Config::inst()->get(VueRenderExtension::class, 'dist_path') . '/index.html';
             if (!is_dir($dir)) {
+                if ($form) {
+                    $form->sessionMessage('Frontend does not exists!', 'bad');
+                }
                 throw new Exception('Frontend does not exists!');
             }
 
             if (!file_exists($index)) {
+                if ($form) {
+                    $form->sessionMessage('Frontend index page is not found!', 'bad');
+                }
                 throw new Exception('Frontend index page is not found!');
             }
 
@@ -74,7 +83,12 @@ class VueRenderer extends Extension
                     $i      =   strpos($index, '</body>');
                     $index  =   substr_replace($index, implode("\n", $scripts) . "\n", $i, 0);
 
-                    $this->write_html($dir, $record->Link() . 'index.html', $index, $www_user, $www_group);
+                    if ($form) {
+                        $this->write_html($dir, $record->Link() . 'index.html', $index, $www_user, $www_group);
+                        $form->sessionMessage('Vue frontend file generated!', 'good');
+                        return true;
+                    }
+                    return $this->write_html($dir, $record->Link() . 'index.html', $index, $www_user, $www_group);
                 }
             }
 
@@ -92,6 +106,12 @@ class VueRenderer extends Extension
                     ' . implode("\n", $scripts) . '
                 </body>
             </html>';
+
+            if ($form) {
+                $this->write_html($dir, $record->Link() . 'index.html', $html, $www_user, $www_group);
+                $form->sessionMessage('Vue frontend file generated!', 'good');
+                return true;
+            }
             return $this->write_html($dir, $record->Link() . 'index.html', $html, $www_user, $www_group);
         }
     }

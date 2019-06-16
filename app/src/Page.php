@@ -21,6 +21,10 @@ namespace {
     use App\Web\Extension\VueRenderExtension;
     use App\Web\Extension\VueRenderer;
     use SilverStripe\Forms\FormAction;
+    use SilverStripe\View\Requirements;
+    use SilverStripe\ErrorPage\ErrorPage;
+    use SilverStripe\CMS\Model\RedirectorPage;
+    use SilverStripe\CMS\Model\VirtualPage;
 
     class Page extends SiteTree implements Flushable
     {
@@ -66,10 +70,14 @@ namespace {
 
         public function getCMSActions()
         {
-            $fields = parent::getCMSActions();
+            if ($this->ClassName == ErrorPage::class || $this->ClassName == RedirectorPage::class || $this->ClassName == VirtualPage::class) {
+                return parent::getCMSActions();
+            }
 
+            Requirements::javascript('leochenftw/leoss4bk: client/js/cms.js');
+            $fields = parent::getCMSActions();
             $fields->fieldByName('MajorActions')->push(
-                FormAction::create('do_render', 'Pre-Render')
+                FormAction::create('do_render', 'Pre-Render')->addExtraClass('btn-vue-prerenderer')
             );
 
             return $fields;

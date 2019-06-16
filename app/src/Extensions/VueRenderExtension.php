@@ -14,7 +14,7 @@ class VueRenderExtension extends LeftAndMainExtension
         'do_render' => true
     ];
 
-    public function do_render()
+    public function do_render($data, $form)
     {
         $record =   $this->owner->getRecord($this->owner->request->Param('ID'));
 
@@ -22,7 +22,7 @@ class VueRenderExtension extends LeftAndMainExtension
             return $this->owner->redirectBack();
         }
 
-        $record->render_vue_html();
+        $record->render_vue_html(null, null, $form);
         return $this->owner->redirectBack();
     }
 }
