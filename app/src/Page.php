@@ -1,7 +1,7 @@
 <?php
 
 namespace {
-
+    use SilverStripe\Core\Convert;
     use SilverStripe\Forms\TextareaField;
     use SilverStripe\Forms\TextField;
     use SilverStripe\SiteConfig\SiteConfig;
@@ -12,19 +12,32 @@ namespace {
     use Leochenftw\Util;
     use Leochenftw\Debugger;
     use SilverStripe\Control\Controller;
+    use SilverStripe\Control\Director;
     use SilverShop\HasOneField\HasOneButtonField;
     use SilverStripe\Core\Flushable;
     use Psr\SimpleCache\CacheInterface;
     use Leochenftw\Util\CacheHandler;
     use SilverStripe\Security\Member;
-    use SilverStripe\Core\Injector\Injector;
+    use App\Web\Extension\VueRenderExtension;
+    use App\Web\Extension\VueRenderer;
+    use SilverStripe\Forms\FormAction;
 
     class Page extends SiteTree implements Flushable
     {
         public static function flush()
         {
-            Injector::inst()->get(CacheInterface::class . '.PageData')->clear();
+            CacheHandler::delete(null, 'PageData');
         }
+
+        /**
+         * Defines extension names and parameters to be applied
+         * to this object upon construction.
+         * @var array
+         */
+        private static $extensions = [
+            VueRenderer::class,
+            VueRenderExtension::class
+        ];
 
         /**
          * CMS Fields
@@ -47,6 +60,17 @@ namespace {
                 'OG'
             );
 
+
+            return $fields;
+        }
+
+        public function getCMSActions()
+        {
+            $fields = parent::getCMSActions();
+
+            $fields->fieldByName('MajorActions')->push(
+                FormAction::create('do_render', 'Pre-Render')
+            );
 
             return $fields;
         }
@@ -82,12 +106,36 @@ namespace {
                 'content'       =>  Util::preprocess_content($this->Content),
                 'menu_title'    =>  $this->MenuTitle,
                 'pagetype'      =>  $this->get_type($this->ClassName),
-                'ancestors'     =>  $this->get_ancestors($this)
+                'ancestors'     =>  $this->get_ancestors($this),
+                'meta'          =>  [
+                    'canonical'     =>  str_replace(
+                                            Director::absoluteBaseURL(),
+                                            $siteconfig->SocialBaseURL,
+                                            $this->ConanicalURL ? Convert::raw2att($this->ConanicalURL) : $this->AbsoluteLink()
+                                        ),
+                    'keywords'      =>  !empty($this->MetaKeywords) ? Convert::raw2att($this->MetaKeywords) : Convert::raw2att($siteconfig->MetaKeywords),
+                    'description'   =>  $this->get_meta_description(),
+                    'robots'        =>  Director::isLive() ?
+                                        (!empty($this->MetaRobots) ? Convert::raw2att($this->MetaRobots) : null) :
+                                        'noindex, nofollow, noarchive',
+                    'social'        =>  $this->get_og_twitter_meta()
+                ]
             ];
 
             CacheHandler::save('page.' . $this->ID, $data, 'PageData');
 
             return $data;
+        }
+
+        public function get_meta_description()
+        {
+            if (!empty($this->MetaDescription)) {
+                return Convert::raw2att($this->MetaDescription);
+            } elseif (!empty(SiteConfig::current_site_config()->MetaDescription)) {
+                return Convert::raw2att(SiteConfig::current_site_config()->MetaDescription);
+            }
+
+            return Convert::raw2att(Util::getWords($this->Content, 50));
         }
 
         private function get_ancestors($item, $ancestors = [])

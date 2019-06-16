@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Web\Extension;
-
+use SilverStripe\Core\Convert;
+use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\Assets\Image;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Forms\CheckboxField;
@@ -11,7 +12,7 @@ use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\TextField;
 use SilverStripe\Forms\ToggleCompositeField;
 use SilverStripe\ORM\DataExtension;
-
+use SilverStripe\Control\Director;
 use Leochenftw\Debugger;
 use SaltedHerring\Salted\Cropper\SaltedCroppableImage;
 use SaltedHerring\Salted\Cropper\Fields\CroppableImageField;
@@ -24,6 +25,8 @@ use SaltedHerring\Salted\Cropper\Fields\CroppableImageField;
 class SocialTagExtension extends DataExtension
 {
     private static $db = [
+        'SocialBaseURL'         =>  'Varchar(1024)',
+        'FBAppID'               =>  'Varchar(128)',
         'OGType'                =>  'Enum("website,article,blog,product")',
         'OGTitle'               =>  'Varchar(255)',
         'OGTitleAsDefault'      =>  'Boolean',
@@ -94,6 +97,13 @@ class SocialTagExtension extends DataExtension
      */
     public function updateCMSFields(FieldList $fields)
     {
+        if ($this->owner->ClassName == 'SilverStripe\CMS\Model\RedirectorPage' ||
+            $this->owner->ClassName == 'SilverStripe\CMS\Model\VirtualPage' ||
+            $this->owner->ClassName == 'SilverStripe\ErrorPage\ErrorPage'
+        ) {
+            return false;
+        }
+
         $is_site_config         =   $this->owner->ClassName == 'SilverStripe\SiteConfig\SiteConfig';
 
         $fields->removeFieldsFromTab('Root.Main', [
@@ -107,6 +117,21 @@ class SocialTagExtension extends DataExtension
         ]);
 
         if (empty($fields->fieldByName('Root.SEO.OG'))) {
+            if ($this->owner->ClassName == SiteConfig::class) {
+                $fields->addFieldsToTab(
+                    'Root.SEO',
+                    [
+                        TextField::create(
+                            'SocialBaseURL'
+                        ),
+                        TextField::create(
+                            'FBAppID',
+                            'Fb:app_id'
+                        )
+                    ]
+                );
+            }
+
             $og_type            =   DropdownField::create(
                                         'OGType',
                                         'Type',
@@ -208,5 +233,158 @@ class SocialTagExtension extends DataExtension
             // $TwitterImage->setDescription('Image must be uploaded at a ratio of 440px x 220px.');
             $fields->addFieldToTab('Root.SEO', $twitter);
         }
+    }
+
+    public function get_og_twitter_meta()
+    {
+        $site_config    =   SiteConfig::current_site_config();
+        if ((!empty($this->owner->OGType) || !empty($site_config->OGType)) && $this->owner->ClassName != SiteConfig::class) {
+            $data   =   [
+                [
+                    'property'  =>  'og:type',
+                    'content'   =>  !empty($this->owner->OGType) ? $this->owner->OGType : $site_config->OGType
+                ],
+                [
+                    'property'  =>  'og:url',
+                    'content'   =>  $this->owner->AbsoluteLink()
+                ],
+                [
+                    'property'  =>  'og:title',
+                    'content'   =>  !empty($this->owner->OGTitle) ? $this->owner->OGTitle : $this->owner->Title
+                ],
+                [
+                    'property'  =>  'og:description',
+                    'content'   =>  !empty($this->owner->OGDescription) ?
+                                    $this->owner->OGDescription :
+                                    (
+                                        !empty($site_config->OGDescription) ?
+                                        $site_config->OGDescription :
+                                        $this->owner->get_meta_description()
+                                    )
+                ],
+                [
+                    'property'  =>  'og:image',
+                    'content'   =>  $this->owner->OGImage()->exists() ?
+                                    $this->owner->OGImage()->getCropped()->getAbsoluteURL() :
+                                    ($site_config->OGImage()->exists() ?
+                                    $site_config->OGImage()->getCropped()->getAbsoluteURL() : null)
+                ],
+                [
+                    'property'  =>  'og:image:width',
+                    'content'   =>  $this->owner->OGImage()->exists() ?
+                                    $this->owner->OGImage()->getCropped()->Width :
+                                    ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->Width : null)
+                ],
+                [
+                    'property'  =>  'og:image:height',
+                    'content'   =>  $this->owner->OGImage()->exists() ?
+                                    $this->owner->OGImage()->getCropped()->Height :
+                                    ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->Height : null)
+                ],
+                [
+                    'property'  =>  'og:image',
+                    'content'   =>  $this->owner->OGImageLarge()->exists() ?
+                                    $this->owner->OGImageLarge()->getCropped()->getAbsoluteURL() :
+                                    ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->getAbsoluteURL() : null)
+                ],
+                [
+                    'property'  =>  'og:image:width',
+                    'content'   =>  $this->owner->OGImageLarge()->exists() ?
+                                    $this->owner->OGImageLarge()->getCropped()->Width :
+                                    ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->Width : null)
+                ],
+                [
+                    'property'  =>  'og:image:height',
+                    'content'   =>  $this->owner->OGImageLarge()->exists() ?
+                                    $this->owner->OGImageLarge()->getCropped()->Height :
+                                    ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->Height : null)
+                ],
+                [
+                    'property'  =>  'fb:app_id',
+                    'content'   =>  $site_config->FBAppID
+                ],
+                [
+                    'name'      =>  'twitter:card',
+                    'content'   =>  !empty($this->owner->TwitterCard) ? $this->owner->TwitterCard : $site_config->TwitterCard
+                ],
+                [
+                    'name'      =>  'twitter:site',
+                    'content'   =>  $this->owner->AbsoluteLink()
+                ],
+                [
+                    'name'      =>  'twitter:title',
+                    'content'   =>  !empty($this->owner->TwitterTitle) ? $this->owner->TwitterTitle : $this->owner->Title
+                ],
+                [
+                    'name'      =>  'twitter:description',
+                    'content'   =>  !empty($this->owner->TwitterDescription) ?
+                                    $this->owner->TwitterDescription :
+                                    (
+                                        !empty($site_config->TwitterDescription) ?
+                                        $site_config->TwitterDescription :
+                                        $this->owner->get_meta_description()
+                                    )
+                ],
+                [
+                    'name'      =>  'twitter:image',
+                    'content'   =>  $this->get_twitter_image()
+                ],
+                [
+                    'itemprop'  =>  'name',
+                    'content'   =>  !empty($this->owner->OGTitle) ? $this->owner->OGTitle : $this->owner->Title
+                ],
+                [
+                    'itemprop'  =>  'description',
+                    'content'   =>  !empty($this->owner->OGDescription) ?
+                                    $this->owner->OGDescription :
+                                    (
+                                        !empty($site_config->OGDescription) ?
+                                        $site_config->OGDescription :
+                                        $this->owner->get_meta_description()
+                                    )
+                ],
+                [
+                    'itemprop'  =>  'image',
+                    'content'   =>  !empty($this->owner->OGImage()->exists()) ?
+                                    $this->owner->OGImage()->getCropped()->getAbsoluteURL() :
+                                    ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->getAbsoluteURL() : null)
+                ]
+            ];
+
+            if ($base_url = $site_config->SocialBaseURL) {
+                $refined    =   [];
+                foreach ($data as $item) {
+                    if (!empty($item['content'])) {
+                        $refined_item   =   [];
+                        foreach ($item as $key => $value) {
+                            $refined_item[$key] =   str_replace(Director::absoluteBaseURL(), $base_url, $value);
+                        }
+                        $refined[]  =   $refined_item;
+                    }
+                }
+
+                return $refined;
+            }
+
+            return $data;
+        }
+        return null;
+    }
+
+    private function get_twitter_image()
+    {
+        if (!empty($this->owner->TwitterCard)) {
+            if ($this->owner->TwitterCard == 'summary') {
+                if ($this->owner->TwitterImage()->exists()) {
+                    return $this->owner->TwitterImage()->getCropped()->getAbsoluteURL();
+                }
+            } else {
+                if ($this->owner->TwitterImageLarge()->exists()) {
+                    return $this->owner->TwitterImageLarge()->getCropped()->getAbsoluteURL();
+                }
+            }
+        }
+
+        return null;
     }
 }

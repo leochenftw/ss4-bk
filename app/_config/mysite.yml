@@ -67,3 +67,17 @@ SilverStripe\Control\Email\Email:
 SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
   extensions:
     - App\Web\Extension\CustomButtonWorkAround
+
+SilverStripe\Admin\LeftAndMain:
+  extensions:
+    - App\Web\Extension\VueRenderExtension
+
+# App\Web\Extension\VueRenderExtension:
+#   dist_path: 'PATH_TO_FRONTEND_DIST_DIRECTORY'
+#
+# ---
+# Only:
+#   environment: 'live'
+# ---
+# App\Web\Extension\VueRenderExtension:
+#   dist_path: 'PATH_TO_FRONTEND_DIST_DIRECTORY'
