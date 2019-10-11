@@ -1,6 +1,7 @@
 <?php
 
-namespace {
+namespace
+{
 
     use SilverStripe\CMS\Controllers\ContentController;
     use SilverStripe\Core\Config\Config;
@@ -10,7 +11,8 @@ namespace {
     use SilverStripe\View\ArrayData;
     use SilverStripe\View\Requirements;
     use SilverStripe\Control\Director;
-    use Leochenftw\Debugger;
+    use Leochenftw\Util\CacheHandler;
+    use SilverStripe\ErrorPage\ErrorPage;
 
     class PageController extends ContentController
     {
@@ -47,7 +49,37 @@ namespace {
 
             if ($this->request->isAjax()) {
                 $this->addCORSHeaders($header);
+                if (SiteConfig::current_site_config()->UnderMaintenance) {
+
+                    if ($this->ClassName == ErrorPage::class && $this->ErrorCode == '503') {
+                        $this->getResponse()->setStatusCode(503);
+                        return json_encode($this->getData());
+                    }
+
+                    if ($page = ErrorPage::get()->filter(['ErrorCode' => '503'])->first()) {
+                        $this->getResponse()->setStatusCode(302);
+                        return json_encode([
+                            'redirect'  =>   $page->Link()
+                        ]);
+                    }
+
+                    return $this->httpError(503);
+                } elseif ($this->ClassName == ErrorPage::class && $this->ErrorCode == '503') {
+                    $this->getResponse()->setStatusCode(301);
+                    return json_encode([
+                        'redirect'  =>   '/'
+                    ]);
+                }
+
                 return json_encode($this->getData());
+            }
+
+            if (SiteConfig::current_site_config()->UnderMaintenance) {
+                if ($this->ClassName != ErrorPage::class || $this->ErrorCode != '503') {
+                    if ($page = ErrorPage::get()->filter(['ErrorCode' => '503'])->first()) {
+                        return $this->redirect($page->Link(), 302);
+                    }
+                }
             }
 
             return $this->renderWith([$this->ClassName, 'Page']);
@@ -56,28 +88,24 @@ namespace {
         protected function init()
         {
             parent::init();
-            // You can include any CSS or JS required by your project here.
-            // See: https://docs.silverstripe.org/en/developer_guides/templates/requirements/
-            Requirements::themedCSS('styles');
-            if (SilverStripe\Control\Director::isDev()) {
-                SilverStripe\View\SSViewer::config()->set('source_file_comments', true);
-            }
         }
 
         public function MetaTags($includeTitle = true)
         {
-            $tags = parent::MetaTags($includeTitle);
+            $tags = '';
 
             if ($this->ConanicalURL) {
-                $tags .= "<link rel=\"canonical\" href=\"" . Convert::raw2att($this->ConanicalURL) . "\" />\n";
-            } elseif (SiteConfig::current_site_config()->ConanicalURL) {
-                $tags .= "<link rel=\"canonical\" href=\"";
-                $tags .= Convert::raw2att(SiteConfig::current_site_config()->ConanicalURL) . "\" />\n";
+                $tags .= "<link rel=\"canonical\" href=\"" . Convert::raw2att($this->ConanicalURL) . "\" data-vue-meta=\"1\" />\n";
             }
 
             if ($this->MetaKeywords) {
-                $tags .= "<meta name=\"keywords\" content=\"" . Convert::raw2att($this->MetaKeywords) . "\" />\n";
+                $tags .= "<meta name=\"keywords\" content=\"" . Convert::raw2att($this->MetaKeywords) . "\" data-vue-meta=\"1\" />\n";
             }
+
+            if ($this->MetaDescription) {
+                $tags .= "<meta name=\"description\" content=\"" . Convert::raw2att($this->MetaDescription) . "\" data-vue-meta=\"1\" />\n";
+            }
+
             if ($this->ExtraMeta) {
                 $tags .= $this->ExtraMeta . "\n";
             }
@@ -89,9 +117,11 @@ namespace {
 
             // prevent bots from spidering the site whilest in dev.
             if (!Director::isLive()) {
-                $tags .= "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n";
+                $tags .= "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" data-vue-meta=\"1\" />\n";
             } elseif (!empty($this->MetaRobots)) {
-                $tags .= "<meta name=\"robots\" content=\"$this->MetaRobots\" />\n";
+                $tags .= "<meta name=\"robots\" content=\"$this->MetaRobots\" data-vue-meta=\"1\" />\n";
+            } else {
+                $tags .= "<meta name=\"robots\" content=\"INDEX, FOLLOW\" data-vue-meta=\"1\" />\n";
             }
 
             $this->extend('MetaTags', $tags);
@@ -123,6 +153,7 @@ namespace {
                     'TwitterCard'           =>  !empty($this->TwitterCard) ?
                                                 $this->TwitterCard :
                                                 $site_config->TwitterCard,
+                    'TwitterCreator'        =>  '@zeffercider',
                     'TwitterTitle'          =>  !empty($this->TwitterTitle) ?
                                                 $this->TwitterTitle :
                                                 $this->Title,
@@ -166,6 +197,11 @@ namespace {
             $response->addHeader('Content-Type', 'application/json');
 
             return $response;
+        }
+
+        public function getYear()
+        {
+            return date('Y', time());
         }
     }
 }

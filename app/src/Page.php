@@ -1,30 +1,24 @@
 <?php
 
-namespace {
-    use SilverStripe\Core\Convert;
-    use SilverStripe\Forms\TextareaField;
+namespace
+{
     use SilverStripe\Forms\TextField;
-    use SilverStripe\SiteConfig\SiteConfig;
-    use SilverStripe\Forms\TabSet;
-    use SilverStripe\Forms\Tab;
+    use SilverStripe\Forms\CheckboxField;
+    use SilverStripe\Forms\TextareaField;
+    use SilverStripe\Forms\DropdownField;
     use SilverStripe\Forms\FieldList;
     use SilverStripe\CMS\Model\SiteTree;
-    use Leochenftw\Util;
-    use Leochenftw\Debugger;
+    use SilverStripe\SiteConfig\SiteConfig;
     use SilverStripe\Control\Controller;
+    use Leochenftw\Debugger;
+    use SilverStripe\Core\Config\Config;
+    use Leochenftw\Util\Grid;
+    use leochenftw\Util;
     use SilverStripe\Control\Director;
-    use SilverShop\HasOneField\HasOneButtonField;
+    use SilverStripe\Core\Convert;
+    use SilverStripe\Security\SecurityToken;
     use SilverStripe\Core\Flushable;
-    use Psr\SimpleCache\CacheInterface;
     use Leochenftw\Util\CacheHandler;
-    use SilverStripe\Security\Member;
-    use App\Web\Extension\VueRenderExtension;
-    use App\Web\Extension\VueRenderer;
-    use SilverStripe\Forms\FormAction;
-    use SilverStripe\View\Requirements;
-    use SilverStripe\ErrorPage\ErrorPage;
-    use SilverStripe\CMS\Model\RedirectorPage;
-    use SilverStripe\CMS\Model\VirtualPage;
 
     class Page extends SiteTree implements Flushable
     {
@@ -33,15 +27,15 @@ namespace {
             CacheHandler::delete(null, 'PageData');
         }
 
+        private static $has_one = [];
+
         /**
-         * Defines extension names and parameters to be applied
-         * to this object upon construction.
-         * @var array
+         * Event handler called before writing to the database.
          */
-        private static $extensions = [
-            VueRenderer::class,
-            VueRenderExtension::class
-        ];
+        public function onBeforeWrite()
+        {
+            parent::onBeforeWrite();
+        }
 
         /**
          * CMS Fields
@@ -50,6 +44,7 @@ namespace {
         public function getCMSFields()
         {
             $fields =   parent::getCMSFields();
+
             $this->extend('updateCMSFields', $fields);
 
             $meta   =   $fields->fieldbyName('Root.Main.Metadata');
@@ -64,73 +59,47 @@ namespace {
                 'OG'
             );
 
-
             return $fields;
         }
 
-        public function getCMSActions()
+        public function getData()
         {
-            if ($this->ClassName == ErrorPage::class || $this->ClassName == RedirectorPage::class || $this->ClassName == VirtualPage::class) {
-                return parent::getCMSActions();
-            }
-
-            Requirements::javascript('leochenftw/leoss4bk: client/js/cms.js');
-            $fields = parent::getCMSActions();
-            $fields->fieldByName('MajorActions')->push(
-                FormAction::create('do_render', 'Pre-Render')->addExtraClass('btn-vue-prerenderer')
-            );
-
-            return $fields;
-        }
-
-        public function getData($mini = false)
-        {
-            if ($mini) {
-                if ($mini_data = CacheHandler::read('page.' . $this->ID . '.mini', 'PageData')) {
-                    return $mini_data;
-                }
-
-                $mini_data  =   [
-                    'id'    =>  $this->ID,
-                    'title' =>  $this->Title,
-                    'url'   =>  $this->Link() == '/' ? '/' : rtrim($this->Link(), '/')
-                ];
-
-                CacheHandler::save('page.' . $this->ID . '.mini', $mini_data, 'PageData');
-
-                return $mini_data;
-            }
-
-            if ($data = CacheHandler::read('page.' . $this->ID, 'PageData')) {
-                return $data;
-            }
-
             $siteconfig =   SiteConfig::current_site_config();
-            $data   =   [
+            $data       =   [
                 'id'            =>  $this->ID,
                 'siteconfig'    =>  $siteconfig->getData(),
                 'navigation'    =>  $this->get_menu_items(),
-                'title'         =>  $this->Title,
+                'title'         =>  $this->URLSegment == 'home' ? SiteConfig::current_site_config()->Title : (!empty($this->MetaTitle) ? $this->MetaTitle : $this->Title),
                 'content'       =>  Util::preprocess_content($this->Content),
-                'menu_title'    =>  $this->MenuTitle,
                 'pagetype'      =>  $this->get_type($this->ClassName),
                 'ancestors'     =>  $this->get_ancestors($this),
                 'meta'          =>  [
                     'canonical'     =>  str_replace(
                                             Director::absoluteBaseURL(),
                                             $siteconfig->SocialBaseURL,
-                                            $this->ConanicalURL ? Convert::raw2att($this->ConanicalURL) : $this->AbsoluteLink()
+                                            $this->ConanicalURL ? Convert::raw2att($this->ConanicalURL) : null
                                         ),
-                    'keywords'      =>  !empty($this->MetaKeywords) ? Convert::raw2att($this->MetaKeywords) : Convert::raw2att($siteconfig->MetaKeywords),
-                    'description'   =>  $this->get_meta_description(),
+                    'keywords'      =>  !empty($this->MetaKeywords) ? Convert::raw2att($this->MetaKeywords) : null,
+                    'description'   =>  !empty($this->MetaDescription) ? Convert::raw2att($this->MetaDescription) : null,
                     'robots'        =>  Director::isLive() ?
-                                        (!empty($this->MetaRobots) ? Convert::raw2att($this->MetaRobots) : null) :
+                                        (!empty($this->MetaRobots) ? Convert::raw2att($this->MetaRobots) : 'INDEX, FOLLOW') :
                                         'noindex, nofollow, noarchive',
                     'social'        =>  $this->get_og_twitter_meta()
                 ]
             ];
 
-            CacheHandler::save('page.' . $this->ID, $data, 'PageData');
+            if ($data['pagetype'] == 'ErrorPage' || $data['pagetype'] == 'Page') {
+                $this->attach_session($data);
+            }
+
+            return $data;
+        }
+
+        public function attach_session(&$data)
+        {
+            $data['session']    =   [
+                'csrf'      =>  SecurityToken::inst()->getSecurityID()
+            ];
 
             return $data;
         }
@@ -146,6 +115,139 @@ namespace {
             return Convert::raw2att(Util::getWords($this->Content, 50));
         }
 
+        private function get_og_twitter_meta()
+        {
+            $site_config    =   SiteConfig::current_site_config();
+            if (!empty($this->OGType) || !empty($site_config->OGType)) {
+                $data   =   [
+                    [
+                        'property'  =>  'og:type',
+                        'content'   =>  !empty($this->OGType) ? $this->OGType : $site_config->OGType
+                    ],
+                    [
+                        'property'  =>  'og:url',
+                        'content'   =>  $this->AbsoluteLink()
+                    ],
+                    [
+                        'property'  =>  'og:title',
+                        'content'   =>  !empty($this->OGTitle) ? $this->OGTitle : $this->Title
+                    ],
+                    [
+                        'property'  =>  'og:description',
+                        'content'   =>  !empty($this->OGDescription) ? $this->OGDescription : $site_config->OGDescription
+                    ],
+                    [
+                        'property'  =>  'og:image',
+                        'content'   =>  $this->OGImage()->exists() ?
+                                        $this->OGImage()->getCropped()->getAbsoluteURL() :
+                                        ($site_config->OGImage()->exists() ?
+                                        $site_config->OGImage()->getCropped()->getAbsoluteURL() : null)
+                    ],
+                    [
+                        'property'  =>  'og:image:width',
+                        'content'   =>  $this->OGImage()->exists() ?
+                                        $this->OGImage()->getCropped()->Width :
+                                        ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->Width : null)
+                    ],
+                    [
+                        'property'  =>  'og:image:height',
+                        'content'   =>  $this->OGImage()->exists() ?
+                                        $this->OGImage()->getCropped()->Height :
+                                        ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->Height : null)
+                    ],
+                    [
+                        'property'  =>  'og:image',
+                        'content'   =>  $this->OGImageLarge()->exists() ?
+                                        $this->OGImageLarge()->getCropped()->getAbsoluteURL() :
+                                        ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->getAbsoluteURL() : null)
+                    ],
+                    [
+                        'property'  =>  'og:image:width',
+                        'content'   =>  $this->OGImageLarge()->exists() ?
+                                        $this->OGImageLarge()->getCropped()->Width :
+                                        ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->Width : null)
+                    ],
+                    [
+                        'property'  =>  'og:image:height',
+                        'content'   =>  $this->OGImageLarge()->exists() ?
+                                        $this->OGImageLarge()->getCropped()->Height :
+                                        ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->Height : null)
+                    ],
+                    [
+                        'name'      =>  'twitter:card',
+                        'content'   =>  !empty($this->TwitterCard) ? $this->TwitterCard : $site_config->TwitterCard
+                    ],
+                    [
+                        'name'      =>  'twitter:site',
+                        'content'   =>  $this->AbsoluteLink()
+                    ],
+                    [
+                        'name'      =>  'twitter:title',
+                        'content'   =>  !empty($this->TwitterTitle) ? $this->TwitterTitle : $this->Title
+                    ],
+                    [
+                        'name'      =>  'twitter:creator',
+                        'content'   =>  '@zeffercider'
+                    ],
+                    [
+                        'name'      =>  'twitter:description',
+                        'content'   =>  !empty($this->TwitterDescription) ?
+                                        $this->TwitterDescription :
+                                        $site_config->TwitterDescription
+                    ],
+                    [
+                        'name'      =>  'twitter:image',
+                        'content'   =>  $this->get_twitter_image()
+                    ],
+                    [
+                        'itemprop'  =>  'name',
+                        'content'   =>  !empty($this->OGTitle) ? $this->OGTitle : $this->Title
+                    ],
+                    [
+                        'itemprop'  =>  'image',
+                        'content'   =>  !empty($this->OGImage()->exists()) ?
+                                        $this->OGImage()->getCropped()->getAbsoluteURL() :
+                                        ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->getAbsoluteURL() : null)
+                    ]
+                ];
+
+                if ($base_url = $site_config->SocialBaseURL) {
+                    $refined    =   [];
+                    foreach ($data as $item) {
+                        if (!empty($item['content'])) {
+                            $refined_item   =   [];
+                            foreach ($item as $key => $value) {
+                                $refined_item[$key] =   str_replace(Director::absoluteBaseURL(), $base_url, $value);
+                            }
+                            $refined[]  =   $refined_item;
+                        }
+                    }
+
+                    return $refined;
+                }
+
+                return $data;
+            }
+            return null;
+        }
+
+        private function get_twitter_image()
+        {
+            if (!empty($this->TwitterCard)) {
+                if ($this->TwitterCard == 'summary') {
+                    if ($this->TwitterImage()->exists()) {
+                        return $this->TwitterImage()->getCropped()->getAbsoluteURL();
+                    }
+                } else {
+                    if ($this->TwitterImageLarge()->exists()) {
+                        return $this->TwitterImageLarge()->getCropped()->getAbsoluteURL();
+                    }
+                }
+            }
+
+            return null;
+        }
+
         private function get_ancestors($item, $ancestors = [])
         {
             if (!$item->Parent()->exists()) {
@@ -153,38 +255,65 @@ namespace {
             }
 
             $ancestors[]    =   [
-                'title'         =>  $item->Parent()->Title,
-                'menu_title'    =>  $this->Parent()->MenuTitle,
-                'url'           =>  $item->Parent()->Link() != '/' ? rtrim($item->Parent()->Link(), '/') : '/'
+                'title' =>  $item->Parent()->Title,
+                'link'   =>  $item->Parent()->Link() != '/' ? rtrim($item->Parent()->Link(), '/') : '/'
             ];
 
             return $this->get_ancestors($item->Parent(), $ancestors);
         }
 
+        private function get_content_data()
+        {
+            $data   =   [];
+
+            if (!empty($this->ContentLeft)) {
+                $data[] =   Util::preprocess_content($this->ContentLeft);
+            }
+
+            if (!empty($this->ContentRight)) {
+                $data[] =   Util::preprocess_content($this->ContentRight);
+            }
+
+            return $data;
+        }
 
         private function get_menu_items($nav = null)
         {
-            $nav    =   empty($nav) ? Controller::curr()->getMenu(1) : $nav;
-            $list   =   [];
+            $controller =   Controller::curr();
+            $controller =   !$controller->hasMethod('getMenu') ? PageController::create() : $controller;
+            $nav        =   empty($nav) ? $controller->getMenu(1) : $nav;
+            $list       =   [];
             foreach ($nav as $item) {
                 $link   =   $item->Link();
 
+                if ($link == '/') {
+                    continue;
+                }
+
                 $list[] =   [
-                    'title'     =>  $item->MenuTitle,
+                    'label'     =>  $item->Title,
                     'url'       =>  $link != '/' ? rtrim($link, '/') : '/',
                     'active'    =>  $item->isSection() || $item->isCurrent(),
                     'sub'       =>  $this->get_menu_items($item->Children()),
                     'pagetype'  =>  $this->get_type($item->ClassName)
                 ];
             }
-
             return $list;
         }
 
         private function get_type($class)
         {
             $seg    =   explode('\\', $class);
-            return strtolower($seg[count($seg) - 1]);
+            return $seg[count($seg) - 1];
+        }
+
+        /**
+         * Event handler called after writing to the database.
+         */
+        public function onAfterWrite()
+        {
+            parent::onAfterWrite();
+            CacheHandler::delete(null, 'PageData');
         }
     }
 }

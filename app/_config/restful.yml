@@ -22,7 +22,24 @@ Name: restful_api
 #   Realm: RestApiAuth
 Leochenftw\Restful\RestfulController:
   https_only: true
-  CORSOrigin: 'https://localhost:8080'
+  # CORSOrigin: 'https://localhost:8080'
+  # CORSOrigins:
+    # - 'https://localhost:8080'
+  # CORSMethods: 'GET, PUT, POST, DELETE, OPTIONS'
+  # CORSMaxAge: '1000'
+  # CORSAllowHeaders: 'Content-Type, Authorization, X-Requested-With'
+  # CORSAllowCredentials: true
+#   Owner: Member
+# SessionValidator:
+#   email_name: email
+#   password_name: password
+# NestedResourceRestController:
+#   root_resource_id_field: ID
+---
+Only:
+  environment: 'dev'
+---
+Leochenftw\Restful\RestfulController:
   CORSOrigins:
     - 'https://localhost:8080'
     - 'https://localhost:8081'
@@ -35,19 +52,3 @@ Leochenftw\Restful\RestfulController:
   CORSMaxAge: '1000'
   CORSAllowHeaders: 'Content-Type, Authorization, X-Requested-With'
   CORSAllowCredentials: true
-#   Owner: Member
-# SessionValidator:
-#   email_name: email
-#   password_name: password
-# NestedResourceRestController:
-#   root_resource_id_field: ID
----
-Only:
-  environment: 'live'
----
-Leochenftw\Restful\RestfulController:
-  CORSOrigin: 'https://www.cita.org.nz'
-  CORSOrigins:
-    - 'https://cita.org.nz'
-    - 'https://cita.nz'
-    - 'https://www.cita.nz'

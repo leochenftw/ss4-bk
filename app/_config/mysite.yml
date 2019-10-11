@@ -9,6 +9,21 @@ SilverStripe\SiteConfig\SiteConfig:
     - App\Web\Extension\SiteConfigExtension
     - App\Web\Extension\GAFamilyExtension
     - App\Web\Extension\SocialTagExtension
+  # FrontendEntryFile: /var/www/silverstripe/ZEF/staging/frontend/dist/index.html
+
+SilverStripe\Forms\HTMLEditor\HTMLEditorField:
+  insert_width: 1920
+
+SilverStripe\Assets\File:
+  force_resample: true
+  insert_width: 1920
+  insert_height: 1920
+  allowed_extensions:
+    - svg
+
+SilverStripe\Assets\Image:
+  extensions:
+    - App\Web\Extension\ImageExtension
 
 SilverStripe\CMS\Model\SiteTree:
   extensions:
@@ -28,20 +43,6 @@ SilverStripe\Assets\Flysystem\AssetAdapter:
     dir:
       public: 0775
       private: 0775
-
-SilverStripe\Core\Injector\Injector:
-  Psr\Log\LoggerInterface:
-    calls:
-      LogFileHandler: [ pushHandler, [ %$LogFileHandler ] ]
-  LogFileHandler:
-    class: Monolog\Handler\StreamHandler
-    constructor:
-      - "../silverstripe.log"
-      - "info"
-  # Psr\SimpleCache\CacheInterface.MODEL_NAME:
-  #   factory: SilverStripe\Core\Cache\CacheFactory
-  #   constructor:
-  #     namespace: "MODEL_NAME"
 
 SilverStripe\ORM\DataList:
   extensions:
@@ -68,16 +69,9 @@ SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
   extensions:
     - App\Web\Extension\CustomButtonWorkAround
 
-SilverStripe\Admin\LeftAndMain:
-  extensions:
-    - App\Web\Extension\VueRenderExtension
-
-# App\Web\Extension\VueRenderExtension:
-#   dist_path: 'PATH_TO_FRONTEND_DIST_DIRECTORY'
-#
 # ---
 # Only:
 #   environment: 'live'
 # ---
-# App\Web\Extension\VueRenderExtension:
-#   dist_path: 'PATH_TO_FRONTEND_DIST_DIRECTORY'
+# SilverStripe\SiteConfig\SiteConfig:
+#   FrontendEntryFile: /var/www/silverstripe/ZEF/zeffer-4.0/frontend/dist/index.html
