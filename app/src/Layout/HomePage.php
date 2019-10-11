@@ -28,4 +28,18 @@ class HomePage extends Page
 
         return parent::canCreate($member, $context);
     }
+
+    public function getData()
+    {
+        $data = CacheHandler::read('page.' . $this->ID, 'PageData');
+
+        if (empty($data)) {
+
+            $data   =   parent::getData();
+            
+            CacheHandler::save('page.' . $this->ID, $data, 'PageData');
+        }
+
+        return $this->attach_session($data);
+    }
 }
