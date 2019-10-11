@@ -9,10 +9,13 @@ use \SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use \SilverStripe\Forms\GridField\GridFieldConfig_RelationEditor;
 use UndefinedOffset\SortableGridField\Forms\GridFieldSortableRows;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldDeleteAction;
+// use SilverStripe\Forms\GridField\GridFieldArchiveAction;
+// use SilverStripe\Versioned\GridFieldArchiveAction;
 
 class Grid
 {
-    public static function make($name, $label = '', $source = null, $sortable = true, $gridHeaderType = 'GridFieldConfig_RecordEditor', $remove_add_button = false)
+    public static function make($name, $label = '', $source = null, $sortable = true, $gridHeaderType = 'GridFieldConfig_RecordEditor', $no_add = false)
     {
         /*
         GridFieldConfig_Base
@@ -36,11 +39,16 @@ class Grid
 
         if ($gridHeaderType == 'GridFieldConfig_RecordEditor') {
             $config =   GridFieldConfig_RecordEditor::create();
+            $delete = $config->getComponentByType(GridFieldDeleteAction::class);
+            $delete->setRemoveRelation(false);
         }
 
         if ($gridHeaderType == 'GridFieldConfig_RelationEditor') {
             $config =   GridFieldConfig_RelationEditor::create();
-            if ($remove_add_button) {
+            $config->removeComponentsByType('SilverStripe\Versioned\GridFieldArchiveAction');
+            $delete = $config->getComponentByType(GridFieldDeleteAction::class);
+            $delete->setRemoveRelation(true);
+            if ($no_add) {
                 $config->removeComponentsByType($config->getComponentByType(GridFieldAddNewButton::class));
             }
         }
