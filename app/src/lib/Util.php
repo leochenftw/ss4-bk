@@ -4,6 +4,7 @@ namespace Leochenftw;
 use SilverStripe\Security\Member;
 use SilverStripe\Control\Director;
 use SilverStripe\Security\SecurityToken;
+use SilverStripe\View\Parsers\ShortcodePars;
 use Page;
 
 class Util
@@ -361,60 +362,11 @@ class Util
 
     public static function preprocess_content($content)
     {
-        $pattern    =   '/\[sitetree_link,id=\d+\]/';
-        preg_match_all($pattern, $content, $matches);
-        $urls       =   [];
-
-        if (!empty($matches[0])) {
-            $matches    =   $matches[0];
-            foreach ($matches as $match) {
-                preg_match('/\d+/', $match, $id);
-                if (!empty($id[0])) {
-                    $id =   $id[0];
-                    if ($page = Page::get()->byID($id)) {
-                        $link       =   '#' . rtrim($page->Link(), '/');
-                        $content    =   str_replace($match, $link, $content);
-                    }
-                }
-            }
+        $content    =   ShortcodeParser::get_active()->parse($content);
+        $ref        =   $_SERVER['HTTP_REFERER'];
+        if (strpos($ref, 'localhost') !== false) {
+            $content   =   str_replace('<img src="', '<img src="' . rtrim(Director::absoluteBaseURL(), '/'), $content);
         }
-
-        $pattern    =   '/\[file_link,id=\d+\]/';
-        preg_match_all($pattern, $content, $matches);
-        $urls       =   [];
-
-        if (!empty($matches[0])) {
-            $matches    =   $matches[0];
-            foreach ($matches as $match) {
-                preg_match('/\d+/', $match, $id);
-                if (!empty($id[0])) {
-                    $id =   $id[0];
-                    if ($file = File::get()->byID($id)) {
-                        $link       =   $file->getAbsoluteURL();
-                        $content    =   str_replace($match, $link, $content);
-                    }
-                }
-            }
-        }
-
-        $pattern    =   '/\[image.+\]/';
-        preg_match_all($pattern, $content, $matches);
-        $urls       =   [];
-
-
-        if (!empty($matches[0])) {
-
-            $matches    =   $matches[0];
-            foreach ($matches as $match) {
-                $restring   =   str_replace(']', ' />', str_replace('[image ', '<img ', $match));
-                $ref        =   $_SERVER['HTTP_REFERER'];
-                if (strpos($ref, 'localhost') !== false) {
-                    $restring   =   str_replace('src="', 'src="' . rtrim(Director::absoluteBaseURL(), '/'), $restring);
-                }
-                $content    =   str_replace($match, $restring, $content);
-            }
-        }
-
         return $content;
     }
 
