@@ -3,6 +3,7 @@
 namespace App\Web\Layout;
 use Page;
 use SilverStripe\Versioned\Versioned;
+use Leochenftw\Util\CacheHandler;
 
 /**
  * Description
