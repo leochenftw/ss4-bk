@@ -4,7 +4,7 @@ namespace Leochenftw;
 use SilverStripe\Security\Member;
 use SilverStripe\Control\Director;
 use SilverStripe\Security\SecurityToken;
-use SilverStripe\View\Parsers\ShortcodePars;
+use SilverStripe\View\Parsers\ShortcodeParser;
 use Page;
 
 class Util
