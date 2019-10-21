@@ -11,14 +11,14 @@ class Util
 {
     public static function check_csrf(&$request)
     {
-        if (($csrf = static::null_it($this->request->postVar('csrf')))) {
+        if (($csrf = static::null_it($request->postVar('csrf'))) || ($csrf = static::null_it($request->getVar('csrf')))) {
             return SecurityToken::inst()->getSecurityID() == $csrf;
         }
 
         return false;
     }
 
-    public static function null_it($val)
+    public static function null_it($value)
     {
         if ($value == 'null') {
             return null;
@@ -34,7 +34,7 @@ class Util
 
         return $value;
     }
-
+    
     public static function parse_file_array($input)
     {
         $array      =   [];
