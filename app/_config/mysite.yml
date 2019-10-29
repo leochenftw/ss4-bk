@@ -15,6 +15,8 @@ SilverStripe\Forms\HTMLEditor\HTMLEditorField:
   insert_width: 1920
 
 SilverStripe\Assets\File:
+  extensions:
+    - App\Web\Extension\FileExtension
   force_resample: true
   insert_width: 1920
   insert_height: 1920
@@ -51,10 +53,6 @@ SilverStripe\ORM\DataList:
 SilverStripe\ORM\ArrayList:
   extensions:
     - App\Web\Extension\DataListExtension
-
-SilverStripe\Assets\File:
-  extensions:
-    - App\Web\Extension\FileExtension
 
 SilverStripe\Control\Email\Email:
   admin_email: leochenftw@gmail.com

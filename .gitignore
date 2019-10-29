@@ -12,3 +12,4 @@ themes/default/dist
 
 silverstripe.log
 public/assets
+composer.lock

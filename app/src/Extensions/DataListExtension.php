@@ -30,7 +30,15 @@ class DataListExtension extends DataExtension
     {
         $result         =   [];
         foreach ($this->owner as $item) {
-            $result[]   =   !is_null($param) ? $item->getData($param) : $item->getData();
+            if (!is_null($param)) {
+                if (!is_array($param)) {
+                    $result[]   =   $item->getData($param);
+                } else {
+                    $result[]   =   call_user_func_array([$item, 'getData'], $param);
+                }
+            } else {
+                $result[]   =   $item->getData();
+            }
         }
 
         return $result;

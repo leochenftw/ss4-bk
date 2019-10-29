@@ -75,7 +75,13 @@ class ImageExtension extends DataExtension
                             (empty($width) ? $this->owner->$resample($height * 2)->getAbsoluteURL() :
                             $this->owner->$resample($width * 2, $height * 2)->getAbsoluteURL()),
             'width'     =>  $width,
-            'height'    =>  $re_height
+            'height'    =>  $re_height,
+            'thumb'     =>  [
+                'url'   =>  empty($height) ?
+                            $this->owner->Fill($width / 3, $width / 3)->getAbsoluteURL() :
+                            (empty($width) ? $this->owner->$resample($height / 3, $height / 3)->getAbsoluteURL() :
+                            $this->owner->Fill($width / 3, $height / 3)->getAbsoluteURL()),
+            ]
         ];
     }
 

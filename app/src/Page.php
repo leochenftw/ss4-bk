@@ -2,17 +2,11 @@
 
 namespace
 {
-    use SilverStripe\Forms\TextField;
-    use SilverStripe\Forms\CheckboxField;
-    use SilverStripe\Forms\TextareaField;
-    use SilverStripe\Forms\DropdownField;
     use SilverStripe\Forms\FieldList;
     use SilverStripe\CMS\Model\SiteTree;
     use SilverStripe\SiteConfig\SiteConfig;
     use SilverStripe\Control\Controller;
     use Leochenftw\Debugger;
-    use SilverStripe\Core\Config\Config;
-    use Leochenftw\Util\Grid;
     use leochenftw\Util;
     use SilverStripe\Control\Director;
     use SilverStripe\Core\Convert;
