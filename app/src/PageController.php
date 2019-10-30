@@ -57,7 +57,7 @@ namespace
                     }
 
                     if ($page = ErrorPage::get()->filter(['ErrorCode' => '503'])->first()) {
-                        $this->getResponse()->setStatusCode(302);
+                        $this->getResponse()->setStatusCode(503);
                         return json_encode([
                             'redirect'  =>   $page->Link()
                         ]);
@@ -65,7 +65,7 @@ namespace
 
                     return $this->httpError(503);
                 } elseif ($this->ClassName == ErrorPage::class && $this->ErrorCode == '503') {
-                    $this->getResponse()->setStatusCode(301);
+                    $this->getResponse()->setStatusCode(503);
                     return json_encode([
                         'redirect'  =>   '/'
                     ]);
@@ -77,7 +77,7 @@ namespace
             if (SiteConfig::current_site_config()->UnderMaintenance) {
                 if ($this->ClassName != ErrorPage::class || $this->ErrorCode != '503') {
                     if ($page = ErrorPage::get()->filter(['ErrorCode' => '503'])->first()) {
-                        return $this->redirect($page->Link(), 302);
+                        return $this->redirect($page->Link(), 503);
                     }
                 }
             }

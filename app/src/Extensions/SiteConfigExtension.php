@@ -112,7 +112,8 @@ class SiteConfigExtension extends DataExtension
     {
         return [
             'title'     =>  $this->owner->Title,
-            'tagline'   =>  $this->owner->Tagline
+            'tagline'   =>  $this->owner->Tagline,
+            'logo'      =>  $this->owner->Logo()->getData('ScaleWidth', 128)
         ];
     }
 

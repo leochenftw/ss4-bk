@@ -13,6 +13,7 @@ namespace
     use SilverStripe\Security\SecurityToken;
     use SilverStripe\Core\Flushable;
     use Leochenftw\Util\CacheHandler;
+    use App\Web\Layout\HomePage;
 
     class Page extends SiteTree implements Flushable
     {
@@ -256,21 +257,6 @@ namespace
             return $this->get_ancestors($item->Parent(), $ancestors);
         }
 
-        private function get_content_data()
-        {
-            $data   =   [];
-
-            if (!empty($this->ContentLeft)) {
-                $data[] =   Util::preprocess_content($this->ContentLeft);
-            }
-
-            if (!empty($this->ContentRight)) {
-                $data[] =   Util::preprocess_content($this->ContentRight);
-            }
-
-            return $data;
-        }
-
         private function get_menu_items($nav = null)
         {
             $controller =   Controller::curr();
@@ -280,7 +266,7 @@ namespace
             foreach ($nav as $item) {
                 $link   =   $item->Link();
 
-                if ($link == '/') {
+                if ($link == '/' || $this->ClassName == HomePage::class) {
                     continue;
                 }
 
