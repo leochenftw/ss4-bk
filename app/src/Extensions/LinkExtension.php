@@ -13,6 +13,7 @@ class LinkExtension extends DataExtension
             'id'            =>  $this->owner->ID,
             'title'         =>  $this->owner->Title,
             'url'           =>  $this->owner->getLinkURL(),
+            'is_internal'   =>  $this->owner->Type == 'SiteTree',
             'open_in_blank' =>  $this->owner->OpenInNewWindow ? true : false
         ];
     }
