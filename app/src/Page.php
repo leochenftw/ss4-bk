@@ -25,14 +25,6 @@ namespace
         private static $has_one = [];
 
         /**
-         * Event handler called before writing to the database.
-         */
-        public function onBeforeWrite()
-        {
-            parent::onBeforeWrite();
-        }
-
-        /**
          * CMS Fields
          * @return FieldList
          */
