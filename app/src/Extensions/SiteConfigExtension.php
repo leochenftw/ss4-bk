@@ -13,6 +13,7 @@ use SilverStripe\Assets\Image;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 use Page;
+use SilverStripe\Core\Environment;
 
 /**
  * @file SiteConfigExtension
@@ -119,7 +120,7 @@ class SiteConfigExtension extends DataExtension
 
     private function read_vue_entry_file()
     {
-        $file   =   $this->owner->config()->FrontendEntryFile;
+        $file   =   Environment::getEnv('FRONTEND_PATH');
         if (!empty($file)) {
             if (file_exists($file)) {
                 return file_get_contents($file);
