@@ -1,14 +1,16 @@
 <?php
 
 namespace App\Web\Extension;
-use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataExtension;
 
-class ImageExtension extends DataExtension
+class SaltyImageExtension extends DataExtension
 {
     public function getData($resample = 'ScaleWidth', $width = 600, $height = null)
     {
         if (!$this->owner->exists()) return null;
+        if (!$this->owner->getCropped()) return null;
+        if (!$this->owner->getCropped()->Width || !$this->owner->getCropped()->Height) return null;
+
         // if is array, the [0] = phone, [1] = tablet, [2] = desktop
         if (is_array($width)) {
             $base_data  =   null;
@@ -16,11 +18,11 @@ class ImageExtension extends DataExtension
             if (!empty($width) && !empty($height)) {
                 $base_data  =   $this->get_base_data($resample, $width[count($width) - 1], $height[count($height) - 1]);
                 if (count($width) > 0) {
-                    $base_data['small'] =  $this->owner->$resample($width[0] * 2, $height[0] * 2)->getAbsoluteURL();
+                    $base_data['small'] =  $this->owner->getCropped()->$resample($width[0] * 2, $height[0] * 2)->getAbsoluteURL();
                 }
 
                 if (count($width) > 1) {
-                    $base_data['medium'] =  $this->owner->$resample($width[1] * 2, $height[1] * 2)->getAbsoluteURL();
+                    $base_data['medium'] =  $this->owner->getCropped()->$resample($width[1] * 2, $height[1] * 2)->getAbsoluteURL();
                 }
 
                 if (count($width) > 2) {
@@ -30,11 +32,11 @@ class ImageExtension extends DataExtension
             } elseif (empty($width) && !empty($height)) {
                 $base_data  =   $this->get_base_data($resample, null, $height[count($height) - 1]);
                 if (count($width) > 0) {
-                    $base_data['small'] =   $this->owner->$resample($height[0] * 2)->getAbsoluteURL();
+                    $base_data['small'] =   $this->owner->getCropped()->$resample($height[0] * 2)->getAbsoluteURL();
                 }
 
                 if (count($width) > 1) {
-                    $base_data['medium'] =   $this->owner->$resample($height[1] * 2)->getAbsoluteURL();
+                    $base_data['medium'] =   $this->owner->getCropped()->$resample($height[1] * 2)->getAbsoluteURL();
                 }
 
                 if (count($width) > 2) {
@@ -44,11 +46,11 @@ class ImageExtension extends DataExtension
             } else {
                 $base_data  =   $this->get_base_data($resample, $width[count($width) - 1]);
                 if (count($width) > 0) {
-                    $base_data['small'] =   $this->owner->$resample($width[0] * 2)->getAbsoluteURL();
+                    $base_data['small'] =   $this->owner->getCropped()->$resample($width[0] * 2)->getAbsoluteURL();
                 }
 
                 if (count($width) > 1) {
-                    $base_data['medium'] =   $this->owner->$resample($width[1] * 2)->getAbsoluteURL();
+                    $base_data['medium'] =   $this->owner->getCropped()->$resample($width[1] * 2)->getAbsoluteURL();
                 }
 
                 if (count($width) > 2) {
@@ -65,15 +67,15 @@ class ImageExtension extends DataExtension
 
     private function get_base_data($resample = 'ScaleWidth', $width = 600, $height = null)
     {
-        $re_height  =   !empty($height) ? $height : round($this->get_ratio($this->owner->Width, $width) * $this->owner->Height);
+        $re_height  =   !empty($height) ? $height : round($this->get_ratio($this->owner->getCropped()->Width, $width) * $this->owner->getCropped()->Height);
         return [
             'id'        =>  $this->owner->ID,
             'title'     =>  $this->owner->Title,
-            'ratio'     =>  round((empty($height) ? ($this->owner->Height / $this->owner->Width) : ($height / $width)) * 10000) / 100,
+            'ratio'     =>  round((empty($height) ? ($this->owner->getCropped()->Height / $this->owner->getCropped()->Width) : ($height / $width)) * 10000) / 100,
             'url'       =>  empty($height) ?
-                            $this->owner->$resample($width * 2)->getAbsoluteURL() :
-                            (empty($width) ? $this->owner->$resample($height * 2)->getAbsoluteURL() :
-                            $this->owner->$resample($width * 2, $height * 2)->getAbsoluteURL()),
+                            $this->owner->getCropped()->$resample($width * 2)->getAbsoluteURL() :
+                            (empty($width) ? $this->owner->getCropped()->$resample($height * 2)->getAbsoluteURL() :
+                            $this->owner->getCropped()->$resample($width * 2, $height * 2)->getAbsoluteURL()),
             'width'     =>  $width,
             'height'    =>  $re_height
         ];

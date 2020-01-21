@@ -75,6 +75,10 @@ SilverStripe\Control\Email\Email:
   noreply_email:
     noreply@basetwo.co.nz: 'Sitename'
 
+SaltedHerring\Salted\Cropper\SaltedCroppableImage:
+  extensions:
+    - App\Web\Extension\SaltyImageExtension
+
 # GoogleAPIs:
 #   reCaptcha:
 #     secret_key:
