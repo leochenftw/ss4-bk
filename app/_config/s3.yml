@@ -13,3 +13,7 @@ SilverStripe\Core\Injector\Injector:
         credentials:
           key: '`AWS_ACCESS_KEY_ID`'
           secret: '`AWS_SECRET_ACCESS_KEY`'
+
+SilverStripe\Admin\LeftAndMain:
+  extra_requirements_javascript:
+    - 'resources/app/client/js/s3-workaround.js'
