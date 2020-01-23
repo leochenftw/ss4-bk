@@ -258,7 +258,7 @@ namespace
             foreach ($nav as $item) {
                 $link   =   $item->Link();
 
-                if ($link == '/' || $this->ClassName == HomePage::class) {
+                if ($link == '/' || $item->ClassName == HomePage::class) {
                     continue;
                 }
 
