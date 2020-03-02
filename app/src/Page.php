@@ -282,7 +282,7 @@ namespace
         /**
          * Event handler called after writing to the database.
          */
-        public function onAfterWrite()
+        protected function onAfterWrite()
         {
             parent::onAfterWrite();
             CacheHandler::delete(null, 'PageData');

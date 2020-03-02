@@ -2,13 +2,6 @@
 Name: cachehandler
 ---
 SilverStripe\Core\Injector\Injector:
-  # Psr\SimpleCache\CacheInterface.cacheblock:
-  #   constructor:
-  #     defaultLifetime: 86400
-  Psr\SimpleCache\CacheInterface.CacheHandler:
-    factory: SilverStripe\Core\Cache\CacheFactory
-    constructor:
-      namespace: "CacheHandler"
   Psr\SimpleCache\CacheInterface.PageData:
     factory: SilverStripe\Core\Cache\CacheFactory
     constructor:

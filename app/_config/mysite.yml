@@ -9,7 +9,6 @@ SilverStripe\SiteConfig\SiteConfig:
     - App\Web\Extension\SiteConfigExtension
     - App\Web\Extension\GAFamilyExtension
     - App\Web\Extension\SocialTagExtension
-  # FrontendEntryFile: /var/www/silverstripe/ZEF/staging/frontend/dist/index.html
 
 SilverStripe\Forms\HTMLEditor\HTMLEditorField:
   insert_width: 1920
@@ -71,17 +70,13 @@ SilverStripe\ORM\ArrayList:
     - App\Web\Extension\DataListExtension
 
 SilverStripe\Control\Email\Email:
-  admin_email: leochenftw@gmail.com
+  admin_email: leo@leochen.co.nz
   noreply_email:
-    noreply@basetwo.co.nz: 'Sitename'
+    noreply@leochen.co.nz: 'Sitename'
 
 SaltedHerring\Salted\Cropper\SaltedCroppableImage:
   extensions:
     - App\Web\Extension\SaltyImageExtension
-
-# GoogleAPIs:
-#   reCaptcha:
-#     secret_key:
 
 SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
   extensions:
