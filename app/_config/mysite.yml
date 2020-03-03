@@ -4,12 +4,6 @@ Name: leoss4bk
 SilverStripe\Core\Manifest\ModuleManifest:
   project: app
 
-SilverStripe\SiteConfig\SiteConfig:
-  extensions:
-    - App\Web\Extension\SiteConfigExtension
-    - App\Web\Extension\GAFamilyExtension
-    - App\Web\Extension\SocialTagExtension
-
 SilverStripe\Forms\HTMLEditor\HTMLEditorField:
   insert_width: 1920
 
@@ -26,31 +20,11 @@ SilverStripe\Core\Injector\Injector:
       Quality: 90
 
 SilverStripe\Assets\File:
-  extensions:
-    - App\Web\Extension\FileExtension
   force_resample: true
   insert_width: 1920
   insert_height: 1920
   allowed_extensions:
     - svg
-
-gorriecoe\Link\Models\Link:
-  extensions:
-    - App\Web\Extension\LinkExtension
-
-SilverStripe\Assets\Image:
-  extensions:
-    - App\Web\Extension\ImageExtension
-
-SilverStripe\CMS\Model\SiteTree:
-  extensions:
-    - App\Web\Extension\SearchableExtension
-    - App\Web\Extension\MetaExtension
-    - App\Web\Extension\SocialTagExtension
-
-SilverStripe\Security\Member:
-  extensions:
-    - App\Web\Extensions\MemberExtension
 
 SilverStripe\Assets\Flysystem\AssetAdapter:
   file_permissions:
@@ -61,26 +35,10 @@ SilverStripe\Assets\Flysystem\AssetAdapter:
       public: 0775
       private: 0775
 
-SilverStripe\ORM\DataList:
-  extensions:
-    - App\Web\Extension\DataListExtension
-
-SilverStripe\ORM\ArrayList:
-  extensions:
-    - App\Web\Extension\DataListExtension
-
 SilverStripe\Control\Email\Email:
   admin_email: leo@leochen.co.nz
   noreply_email:
     noreply@leochen.co.nz: 'Sitename'
-
-SaltedHerring\Salted\Cropper\SaltedCroppableImage:
-  extensions:
-    - App\Web\Extension\SaltyImageExtension
-
-SilverStripe\Forms\GridField\GridFieldDetailForm_ItemRequest:
-  extensions:
-    - App\Web\Extension\CustomButtonWorkAround
 
 # ---
 # Only:

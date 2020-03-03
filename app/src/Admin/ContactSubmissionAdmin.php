@@ -3,6 +3,7 @@
 namespace App\Web\Admin;
 use SilverStripe\Admin\ModelAdmin;
 use App\Web\Model\ContactSubmission;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
 
 /**
  * Description
@@ -32,5 +33,16 @@ class ContactSubmissionAdmin extends ModelAdmin
      */
     private static $menu_title = 'Contact Submissions';
 
-
+    public function getEditForm($id = null, $fields = null) {
+        $form = parent::getEditForm($id, $fields);
+        if($this->modelClass == ContactSubmission::class) {
+            $form
+            ->Fields()
+            ->fieldByName($this->sanitiseClassName($this->modelClass))
+            ->getConfig()
+            ->getComponentByType(GridFieldDetailForm::class)
+            ->setItemRequestClass(ContactSubmissionGridFieldDetailForm_ItemRequest::class);
+        }
+        return $form;
+    }
 }

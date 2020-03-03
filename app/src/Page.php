@@ -13,7 +13,7 @@ namespace
     use SilverStripe\Security\SecurityToken;
     use SilverStripe\Core\Flushable;
     use Leochenftw\Util\CacheHandler;
-    use App\Web\Layout\HomePage;
+    use SilverStripe\Security\Member;
 
     class Page extends SiteTree implements Flushable
     {
@@ -87,6 +87,13 @@ namespace
             $data['session']    =   [
                 'csrf'      =>  SecurityToken::inst()->getSecurityID()
             ];
+
+            // uncomment below to allow the quick edit links to be included for the frontend use
+            // if ($member = Member::currentUser()) {
+            //     if ($member->inGroup('administrators')) {
+            //         $data['edit_link']  =   $this->get_cms_edit_link();
+            //     }
+            // }
 
             return $data;
         }
@@ -258,13 +265,9 @@ namespace
             foreach ($nav as $item) {
                 $link   =   $item->Link();
 
-                if ($link == '/' || $item->ClassName == HomePage::class) {
-                    continue;
-                }
-
                 $list[] =   [
                     'label'     =>  $item->Title,
-                    'url'       =>  $link != '/' ? rtrim($link, '/') : '/',
+                    'url'       =>  $link,
                     'active'    =>  $item->isSection() || $item->isCurrent(),
                     'sub'       =>  $this->get_menu_items($item->Children()),
                     'pagetype'  =>  $this->get_type($item->ClassName)
@@ -286,6 +289,18 @@ namespace
         {
             parent::onAfterWrite();
             CacheHandler::delete(null, 'PageData');
+        }
+
+        public function get_cms_edit_link()
+        {
+            return Controller::join_links(
+                Director::absoluteURL(Director::baseURL()),
+                'admin',
+                'pages',
+                'edit',
+                'show',
+                $this->ID
+            );
         }
     }
 }
