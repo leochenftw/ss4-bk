@@ -176,22 +176,17 @@ namespace
 
         protected function addCORSHeaders($response)
         {
-            $config             =   Config::inst()->get('Leochenftw\Restful\RestfulController');
+            if (Director::isDev()) {
+                $config =   Config::inst()->get('Leochenftw\Restful\RestfulController');
 
-            $default_origin     =   $config['CORSOrigin'];
-            $allowed_origins    =   $config['CORSOrigins'];
-
-            if (in_array($this->request->getHeader('origin'), $allowed_origins)) {
                 $response->addHeader('Access-Control-Allow-Origin', $this->request->getHeader('origin'));
-            } else {
-                $response->addHeader('Access-Control-Allow-Origin', $default_origin);
-            }
+                $response->addHeader('Access-Control-Allow-Methods', $config['CORSMethods']);
+                $response->addHeader('Access-Control-Max-Age', $config['CORSMaxAge']);
+                $response->addHeader('Access-Control-Allow-Headers', $config['CORSAllowHeaders']);
 
-            $response->addHeader('Access-Control-Allow-Methods', $config['CORSMethods']);
-            $response->addHeader('Access-Control-Max-Age', $config['CORSMaxAge']);
-            $response->addHeader('Access-Control-Allow-Headers', $config['CORSAllowHeaders']);
-            if ($config['CORSAllowCredentials']) {
-                $response->addHeader('Access-Control-Allow-Credentials', 'true');
+                if ($config['CORSAllowCredentials']) {
+                    $response->addHeader('Access-Control-Allow-Credentials', 'true');
+                }
             }
 
             $response->addHeader('Content-Type', 'application/json');

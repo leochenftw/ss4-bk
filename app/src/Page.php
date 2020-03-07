@@ -75,6 +75,8 @@ namespace
                 ]
             ];
 
+            $this->extend('getData', $data);
+
             if ($data['pagetype'] == 'ErrorPage' || $data['pagetype'] == 'Page') {
                 $this->attach_session($data);
             }
