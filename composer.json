@@ -29,7 +29,6 @@
         "silvershop/silverstripe-hasonefield": "^3.0.1",
         "gdmedia/ss-auto-git-ignore": "^1.0",
         "leochenftw/ss-arsenal": "dev-master",
-        "konekt/pdf-invoice": "^1.5",
         "dynamic/silverstripe-country-dropdown-field": "^1.2",
         "colymba/gridfield-bulk-editing-tools": "^3.0"
     },
