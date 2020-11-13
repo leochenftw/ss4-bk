@@ -1,23 +1,14 @@
 <?php
 
-namespace App\Web\Layout;
-use SilverStripe\Control\HTTPRequest;
+namespace App\Web\Page;
+
 use PageController;
-use SilverStripe\Security\Member;
-use SilverStripe\Versioned\Versioned;
+
 /**
- * Description
- *
- * @package silverstripe
- * @subpackage mysite
+ * Description.
  */
 class MemberCentreController extends PageController
 {
-    public function index(HTTPRequest $request)
-    {
-        return parent::index($request);
-    }
-
     public function getData()
     {
         return [];

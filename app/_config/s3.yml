@@ -16,4 +16,4 @@ SilverStripe\Core\Injector\Injector:
 
 SilverStripe\Admin\LeftAndMain:
   extra_requirements_javascript:
-    - 'resources/app/client/js/s3-workaround.js'
+    - '_resources/app/client/js/cms/s3-workaround.js'

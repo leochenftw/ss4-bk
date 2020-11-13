@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Web\Layout;
-use Page;
-use SilverStripe\Versioned\Versioned;
+namespace App\Web\Page;
+
 use Leochenftw\Util\CacheHandler;
+use Page;
+use SilverStripe\Control\Director;
+use SilverStripe\Versioned\Versioned;
 
 /**
- * Description
- *
- * @package silverstripe
- * @subpackage mysite
+ * Description.
  */
 class HomePage extends Page
 {
     /**
-     * Defines the database table name
+     * Defines the database table name.
+     *
      * @var string
      */
     private static $table_name = 'HomePage';
@@ -31,12 +31,11 @@ class HomePage extends Page
 
     public function getData()
     {
-        $data = CacheHandler::read('page.' . $this->ID, 'PageData');
+        $data = Director::isDev() ? null : CacheHandler::read('page.' . $this->ID, 'PageData');
 
         if (empty($data)) {
+            $data = parent::getData();
 
-            $data   =   parent::getData();
-            
             CacheHandler::save('page.' . $this->ID, $data, 'PageData');
         }
 

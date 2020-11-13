@@ -39,10 +39,3 @@ SilverStripe\Control\Email\Email:
   admin_email: leo@leochen.co.nz
   noreply_email:
     noreply@leochen.co.nz: 'Sitename'
-
-# ---
-# Only:
-#   environment: 'live'
-# ---
-# SilverStripe\SiteConfig\SiteConfig:
-#   FrontendEntryFile: /var/www/silverstripe/ZEF/zeffer-4.0/frontend/dist/index.html
