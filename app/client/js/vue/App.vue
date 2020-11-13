@@ -1,37 +1,48 @@
 <template>
   <v-app>
-    <v-navigation-drawer app>
-      <!-- -->
-    </v-navigation-drawer>
-
-    <v-app-bar app>
-      <!-- -->
-    </v-app-bar>
-
-    <!-- Sizes your content based upon application components -->
-    <v-main>
-
-      <!-- Provides the application the proper gutter -->
-      <v-container fluid>
-
-        <!-- If using vue-router -->
-        <router-view></router-view>
-        <v-avatar
-          color="primary"
-          size="56"
-        ></v-avatar>
-      </v-container>
-    </v-main>
-
-    <v-footer app>
-      <!-- -->
-    </v-footer>
+    <div class="text-center">
+      <v-btn
+        color="blue"
+        dark
+        @click="sheet = !sheet"
+      >
+        Open v-model
+      </v-btn>
+      <v-bottom-sheet v-model="sheet">
+        <v-sheet
+          class="text-center"
+          height="200px"
+        >
+          <v-btn
+            class="mt-6"
+            text
+            color="red"
+            @click="sheet = !sheet"
+          >
+            close
+          </v-btn>
+          <div class="py-3">
+            This is a bottom sheet using the controlled by v-model instead of activator
+          </div>
+        </v-sheet>
+      </v-bottom-sheet>
+    </div>
   </v-app>
 </template>
 
 <script>
 export default {
   name: "App",
+  data: () => ({
+    sheet: false,
+    tiles: [
+      { img: 'keep.png', title: 'Keep' },
+      { img: 'inbox.png', title: 'Inbox' },
+      { img: 'hangouts.png', title: 'Hangouts' },
+      { img: 'messenger.png', title: 'Messenger' },
+      { img: 'google.png', title: 'Google+' },
+    ],
+  }),
   created() {
     console.log("test")
   }
