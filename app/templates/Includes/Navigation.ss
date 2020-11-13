@@ -1,8 +1,8 @@
-<nav class="navbar is-transparent">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
     <%-- uncomment below if nav should be wrapped in a container - and also uncomment the 42nd line --%>
-    <%-- <div class="container"> --%>
+    <div class="container">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/" id="logo" rel="start">
+            <a class="navbar-brand" href="/" id="logo" rel="start">
             <% if $SiteConfig.SiteLogo %>
                 <% with $SiteConfig.SiteLogo.SetHeight(80) %>
                 <img alt="$Up.Up.Title" width="$Width" height="$Height" src="$URL" />
@@ -11,11 +11,9 @@
                 $SiteConfig.Title
             <% end_if %>
             </a>
-            <div id="btn-mobile-menu" class="navbar-burger" data-target="main-nav">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
 
         <div id="main-nav" class="navbar-menu">
@@ -39,5 +37,5 @@
                 <% end_loop %>
             </div>
         </div>
-    <%-- </div> --%>
+    </div>
 </nav>
