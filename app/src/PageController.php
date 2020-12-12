@@ -115,11 +115,7 @@ class PageController extends ContentController
 
     public function getInitialPageData()
     {
-        $data = array_merge($this->Data, [
-            'session' => array_merge([
-                'csrf' => SecurityToken::inst()->getSecurityID(),
-            ]),
-        ]);
+        $data = $this->Data;
 
         if ($member = Member::currentUser()) {
             if ($member->inGroup('administrators') && $this->exists()) {

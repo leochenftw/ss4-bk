@@ -6,6 +6,11 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  watch: {
+    $route(to) {
+      this.$store.dispatch("getPageData", to.fullPath)
+    }
+  },
 }
 </script>

@@ -15,6 +15,11 @@
     <% include OG %>
     $SiteConfig.GoogleAnalyticsCode.RAW
     $SiteConfig.GTMHead.RAW
+    <% if $InitialPageData %>
+    <script>
+        window.appInitialData = $InitialPageData.RAW;
+    </script>
+    <% end_if %>
 </head>
 <body <% if $i18nScriptDirection %>dir="$i18nScriptDirection"<% end_if %>>
 $SiteConfig.GTMBody.RAW

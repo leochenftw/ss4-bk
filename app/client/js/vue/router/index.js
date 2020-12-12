@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Base from '../components/pages/Base.vue'
+import Base from '../components/pages/Base'
 
 Vue.use(Router)
 

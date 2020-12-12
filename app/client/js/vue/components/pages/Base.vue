@@ -1,6 +1,6 @@
 <template>
 <v-main>
-    <component :is="site_data.pagetype" />
+    <component v-if="site_data" :is="site_data.pagetype" />
 </v-main>
 </template>
 
@@ -9,10 +9,5 @@ import * as components from "./index.js"
 export default {
     name: "Base",
     components: { ...components },
-    computed: {
-        site_data() {
-            return { pagetype: "HomePage" }
-        }
-    }
 }
 </script>

@@ -39,6 +39,6 @@ class HomePage extends Page
             CacheHandler::save('page.' . $this->ID, $data, 'PageData');
         }
 
-        return $this->attach_session($data);
+        return $data;
     }
 }
