@@ -9,8 +9,8 @@
     $SiteConfig.GoogleSiteVerificationCode.RAW
     <% base_tag %>
     <title><% if $URLSegment == 'home' %><% if $MetaTitle %>$MetaTitle<% else %>$SiteConfig.Title<% end_if %><% else %><% if $MetaTitle %>$MetaTitle<% else %>$Title<% end_if %><% end_if %></title>
-    <meta charset="utf-8" data-vue-meta="1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" data-vue-meta="1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     $MetaTags(false)
     <% include OG %>
     $SiteConfig.GoogleAnalyticsCode.RAW

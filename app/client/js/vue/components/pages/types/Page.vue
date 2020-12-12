@@ -2,7 +2,7 @@
 <v-container>
     <v-row>
         <v-col cols="12">
-            <h1>Page</h1>
+            <h1>{{ site_data.title }}</h1>
         </v-col>
     </v-row>
 </v-container>
