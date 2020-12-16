@@ -149,7 +149,7 @@ class PageController extends ContentController
             return json_encode(array_merge($this->Data, ['edit_url' => $this->CMSEditLink()]));
         }
 
-        return json_encode($data);
+        return json_encode($this->Data);
     }
 
     protected function init()
