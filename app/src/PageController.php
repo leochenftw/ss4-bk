@@ -8,7 +8,6 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\ErrorPage\ErrorPage;
 use SilverStripe\Security\Member;
-use SilverStripe\Security\SecurityToken;
 use SilverStripe\SiteConfig\SiteConfig;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\Requirements;
@@ -65,36 +64,36 @@ class PageController extends ContentController
         if (!empty($this->OGType) || !empty($site_config->OGType)) {
             $data = [
                 'OGType' => !empty($this->OGType) ?
-                            $this->OGType :
-                            $site_config->OGType,
+                    $this->OGType :
+                    $site_config->OGType,
                 'AbsoluteLink' => $this->AbsoluteLink(),
                 'OGTitle' => (!empty($this->OGTitle) ?
-                            $this->OGTitle :
-                            $this->Title) . " - {$site_config->Title}",
+                    $this->OGTitle :
+                    $this->Title) . " - {$site_config->Title}",
                 'OGDescription' => !empty($this->OGDescription) ?
-                            $this->OGDescription :
-                            $site_config->OGDescription,
+                    $this->OGDescription :
+                    $site_config->OGDescription,
                 'OGImage' => !empty($this->OGImage()->exists()) ?
-                            $this->OGImage() :
-                            $site_config->OGImage(),
+                    $this->OGImage() :
+                    $site_config->OGImage(),
                 'OGImageLarge' => !empty($this->OGImageLarge()->exists()) ?
-                            $this->OGImageLarge() :
-                            $site_config->OGImageLarge(),
+                    $this->OGImageLarge() :
+                    $site_config->OGImageLarge(),
                 'TwitterCard' => !empty($this->TwitterCard) ?
-                            $this->TwitterCard :
-                            $site_config->TwitterCard,
+                    $this->TwitterCard :
+                    $site_config->TwitterCard,
                 'TwitterTitle' => (!empty($this->TwitterTitle) ?
-                            $this->TwitterTitle :
-                            $this->Title) . " - {$site_config->Title}",
+                    $this->TwitterTitle :
+                    $this->Title) . " - {$site_config->Title}",
                 'TwitterDescription' => !empty($this->TwitterDescription) ?
-                            $this->TwitterDescription :
-                            $site_config->TwitterDescription,
+                    $this->TwitterDescription :
+                    $site_config->TwitterDescription,
                 'TwitterImageLarge' => !empty($this->TwitterImageLarge()->exists()) ?
-                            $this->TwitterImageLarge() :
-                            $site_config->TwitterImageLarge(),
+                    $this->TwitterImageLarge() :
+                    $site_config->TwitterImageLarge(),
                 'TwitterImage' => !empty($this->TwitterImage()->exists()) ?
-                            $this->TwitterImage() :
-                            $site_config->TwitterImage(),
+                    $this->TwitterImage() :
+                    $site_config->TwitterImage(),
             ];
 
             return ArrayData::create($data);
@@ -146,14 +145,8 @@ class PageController extends ContentController
             return json_encode($error_page->Data);
         }
 
-        $data = array_merge($this->Data, [
-            'session' => array_merge([
-                'csrf' => SecurityToken::inst()->getSecurityID(),
-            ]),
-        ]);
-
         if ($this->isAdmin() && $this->exists()) {
-            return json_encode(array_merge($data, ['edit_url' => $this->CMSEditLink()]));
+            return json_encode(array_merge($this->Data, ['edit_url' => $this->CMSEditLink()]));
         }
 
         return json_encode($data);

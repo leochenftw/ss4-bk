@@ -5,7 +5,6 @@ use leochenftw\Util;
 use Leochenftw\Util\CacheHandler;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
-use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Flushable;
 use SilverStripe\Forms\FieldList;
@@ -51,7 +50,6 @@ class Page extends SiteTree implements Flushable
         $siteconfig = SiteConfig::current_site_config();
         $data = [
             'id' => $this->ID,
-            'siteconfig' => $siteconfig->Data,
             'navigation' => $this->get_menu_items(),
             'title' => ($this instanceof HomePage) ? SiteConfig::current_site_config()->Title : (!empty($this->MetaTitle) ? $this->MetaTitle : $this->Title),
             'content' => Util::preprocess_content($this->Content),
@@ -59,21 +57,13 @@ class Page extends SiteTree implements Flushable
             'ancestors' => $this->get_ancestors($this),
         ];
 
+        if (!empty($siteconfig->Data)) {
+            $data = array_merge($data, ['siteconfig' => $siteconfig->Data]);
+        }
+
         $this->extend('getData', $data);
 
         return $data;
-    }
-
-    public function get_cms_edit_link()
-    {
-        return Controller::join_links(
-            Director::absoluteURL(Director::baseURL()),
-            'admin',
-            'pages',
-            'edit',
-            'show',
-            $this->ID
-        );
     }
 
     /**
