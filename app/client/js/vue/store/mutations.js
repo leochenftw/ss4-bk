@@ -10,5 +10,8 @@ export default {
   },
   SET_SITE_DATA(state, site_data) {
     state.site_data = site_data
+    if (site_data) {
+      document.title = site_data.title
+    }
   }
 }

@@ -7,7 +7,6 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
 use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Flushable;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\SiteConfig\SiteConfig;
@@ -58,36 +57,11 @@ class Page extends SiteTree implements Flushable
             'content' => Util::preprocess_content($this->Content),
             'pagetype' => ClassInfo::shortName($this->ClassName),
             'ancestors' => $this->get_ancestors($this),
-            'meta' => [
-                'canonical' => str_replace(
-                    Director::absoluteBaseURL(),
-                    $siteconfig->SocialBaseURL,
-                    $this->ConanicalURL ? Convert::raw2att($this->ConanicalURL) : null
-                ),
-                'keywords' => !empty($this->MetaKeywords) ? Convert::raw2att($this->MetaKeywords) : null,
-                'description' => !empty($this->MetaDescription) ? Convert::raw2att($this->MetaDescription) : null,
-                'robots' => Director::isLive() ?
-                            (!empty($this->MetaRobots) ? Convert::raw2att($this->MetaRobots) : 'INDEX, FOLLOW') :
-                            'noindex, nofollow, noarchive',
-                'social' => $this->get_og_twitter_meta(),
-            ],
         ];
 
         $this->extend('getData', $data);
 
         return $data;
-    }
-
-    public function get_meta_description()
-    {
-        if (!empty($this->MetaDescription)) {
-            return Convert::raw2att($this->MetaDescription);
-        }
-        if (!empty(SiteConfig::current_site_config()->MetaDescription)) {
-            return Convert::raw2att(SiteConfig::current_site_config()->MetaDescription);
-        }
-
-        return Convert::raw2att(Util::getWords($this->Content, 50));
     }
 
     public function get_cms_edit_link()
@@ -109,140 +83,6 @@ class Page extends SiteTree implements Flushable
     {
         parent::onAfterWrite();
         CacheHandler::delete(null, 'PageData');
-    }
-
-    private function get_og_twitter_meta()
-    {
-        $site_config = SiteConfig::current_site_config();
-        if (!empty($this->OGType) || !empty($site_config->OGType)) {
-            $data = [
-                [
-                    'property' => 'og:type',
-                    'content' => !empty($this->OGType) ? $this->OGType : $site_config->OGType,
-                ],
-                [
-                    'property' => 'og:url',
-                    'content' => $this->AbsoluteLink(),
-                ],
-                [
-                    'property' => 'og:title',
-                    'content' => !empty($this->OGTitle) ? $this->OGTitle : $this->Title,
-                ],
-                [
-                    'property' => 'og:description',
-                    'content' => !empty($this->OGDescription) ? $this->OGDescription : $site_config->OGDescription,
-                ],
-                [
-                    'property' => 'og:image',
-                    'content' => $this->OGImage()->exists() ?
-                                    $this->OGImage()->getCropped()->getAbsoluteURL() :
-                                    ($site_config->OGImage()->exists() ?
-                                    $site_config->OGImage()->getCropped()->getAbsoluteURL() : null),
-                ],
-                [
-                    'property' => 'og:image:width',
-                    'content' => $this->OGImage()->exists() ?
-                                    $this->OGImage()->getCropped()->Width :
-                                    ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->Width : null),
-                ],
-                [
-                    'property' => 'og:image:height',
-                    'content' => $this->OGImage()->exists() ?
-                                    $this->OGImage()->getCropped()->Height :
-                                    ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->Height : null),
-                ],
-                [
-                    'property' => 'og:image',
-                    'content' => $this->OGImageLarge()->exists() ?
-                                    $this->OGImageLarge()->getCropped()->getAbsoluteURL() :
-                                    ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->getAbsoluteURL() : null),
-                ],
-                [
-                    'property' => 'og:image:width',
-                    'content' => $this->OGImageLarge()->exists() ?
-                                    $this->OGImageLarge()->getCropped()->Width :
-                                    ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->Width : null),
-                ],
-                [
-                    'property' => 'og:image:height',
-                    'content' => $this->OGImageLarge()->exists() ?
-                                    $this->OGImageLarge()->getCropped()->Height :
-                                    ($site_config->OGImageLarge()->exists() ? $site_config->OGImageLarge()->getCropped()->Height : null),
-                ],
-                [
-                    'name' => 'twitter:card',
-                    'content' => !empty($this->TwitterCard) ? $this->TwitterCard : $site_config->TwitterCard,
-                ],
-                [
-                    'name' => 'twitter:site',
-                    'content' => $this->AbsoluteLink(),
-                ],
-                [
-                    'name' => 'twitter:title',
-                    'content' => !empty($this->TwitterTitle) ? $this->TwitterTitle : $this->Title,
-                ],
-                [
-                    'name' => 'twitter:creator',
-                    'content' => '@zeffercider',
-                ],
-                [
-                    'name' => 'twitter:description',
-                    'content' => !empty($this->TwitterDescription) ?
-                                    $this->TwitterDescription :
-                                    $site_config->TwitterDescription,
-                ],
-                [
-                    'name' => 'twitter:image',
-                    'content' => $this->get_twitter_image(),
-                ],
-                [
-                    'itemprop' => 'name',
-                    'content' => !empty($this->OGTitle) ? $this->OGTitle : $this->Title,
-                ],
-                [
-                    'itemprop' => 'image',
-                    'content' => !empty($this->OGImage()->exists()) ?
-                                    $this->OGImage()->getCropped()->getAbsoluteURL() :
-                                    ($site_config->OGImage()->exists() ? $site_config->OGImage()->getCropped()->getAbsoluteURL() : null),
-                ],
-            ];
-
-            if ($base_url = $site_config->SocialBaseURL) {
-                $refined = [];
-                foreach ($data as $item) {
-                    if (!empty($item['content'])) {
-                        $refined_item = [];
-                        foreach ($item as $key => $value) {
-                            $refined_item[$key] = str_replace(Director::absoluteBaseURL(), $base_url, $value);
-                        }
-                        $refined[] = $refined_item;
-                    }
-                }
-
-                return $refined;
-            }
-
-            return $data;
-        }
-
-        return null;
-    }
-
-    private function get_twitter_image()
-    {
-        if (!empty($this->TwitterCard)) {
-            if ('summary' == $this->TwitterCard) {
-                if ($this->TwitterImage()->exists()) {
-                    return $this->TwitterImage()->getCropped()->getAbsoluteURL();
-                }
-            } else {
-                if ($this->TwitterImageLarge()->exists()) {
-                    return $this->TwitterImageLarge()->getCropped()->getAbsoluteURL();
-                }
-            }
-        }
-
-        return null;
     }
 
     private function get_ancestors($item, $ancestors = [])

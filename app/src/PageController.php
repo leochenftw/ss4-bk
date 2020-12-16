@@ -22,18 +22,18 @@ class PageController extends ContentController
         $tags = '';
 
         if ($this->ConanicalURL) {
-            $tags .= '<link rel="canonical" href="' . Convert::raw2att($this->ConanicalURL) . "\" data-vue-meta=\"1\" />\n";
+            $tags .= '<link rel="canonical" href="' . Convert::raw2att($this->ConanicalURL) . "\" />\n";
         }
 
         if ($this->MetaKeywords) {
-            $tags .= '<meta name="keywords" content="' . Convert::raw2att($this->MetaKeywords) . "\" data-vue-meta=\"1\" />\n";
+            $tags .= '<meta name="keywords" content="' . Convert::raw2att($this->MetaKeywords) . "\" />\n";
         }
 
         if ($this->MetaDescription) {
-            $tags .= '<meta name="description" content="' . Convert::raw2att($this->MetaDescription) . "\" data-vue-meta=\"1\" />\n";
+            $tags .= '<meta name="description" content="' . Convert::raw2att($this->MetaDescription) . "\" />\n";
         } elseif (!empty($this->Content)) {
             $trimmed = substr(strip_tags(Util::preprocess_content($this->Content)), 0, 150) . (strlen(Util::preprocess_content($this->Content)) > 150 ? '...' : '');
-            $tags .= '<meta name="description" content="' . Convert::raw2att($trimmed) . "\" data-vue-meta=\"1\" />\n";
+            $tags .= '<meta name="description" content="' . Convert::raw2att($trimmed) . "\" />\n";
         }
 
         if ($this->ExtraMeta) {
@@ -47,11 +47,11 @@ class PageController extends ContentController
 
         // prevent bots from spidering the site whilest in dev.
         if (!Director::isLive()) {
-            $tags .= "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" data-vue-meta=\"1\" />\n";
+            $tags .= "<meta name=\"robots\" content=\"noindex, nofollow, noarchive\" />\n";
         } elseif (!empty($this->MetaRobots)) {
-            $tags .= "<meta name=\"robots\" content=\"{$this->MetaRobots}\" data-vue-meta=\"1\" />\n";
+            $tags .= "<meta name=\"robots\" content=\"{$this->MetaRobots}\" />\n";
         } else {
-            $tags .= "<meta name=\"robots\" content=\"INDEX, FOLLOW\" data-vue-meta=\"1\" />\n";
+            $tags .= "<meta name=\"robots\" content=\"INDEX, FOLLOW\" />\n";
         }
 
         $this->extend('MetaTags', $tags);
@@ -65,36 +65,36 @@ class PageController extends ContentController
         if (!empty($this->OGType) || !empty($site_config->OGType)) {
             $data = [
                 'OGType' => !empty($this->OGType) ?
-                                            $this->OGType :
-                                            $site_config->OGType,
+                            $this->OGType :
+                            $site_config->OGType,
                 'AbsoluteLink' => $this->AbsoluteLink(),
                 'OGTitle' => (!empty($this->OGTitle) ?
-                                            $this->OGTitle :
-                                            $this->Title) . " - {$site_config->Title}",
+                            $this->OGTitle :
+                            $this->Title) . " - {$site_config->Title}",
                 'OGDescription' => !empty($this->OGDescription) ?
-                                            $this->OGDescription :
-                                            $site_config->OGDescription,
+                            $this->OGDescription :
+                            $site_config->OGDescription,
                 'OGImage' => !empty($this->OGImage()->exists()) ?
-                                            $this->OGImage() :
-                                            $site_config->OGImage(),
+                            $this->OGImage() :
+                            $site_config->OGImage(),
                 'OGImageLarge' => !empty($this->OGImageLarge()->exists()) ?
-                                            $this->OGImageLarge() :
-                                            $site_config->OGImageLarge(),
+                            $this->OGImageLarge() :
+                            $site_config->OGImageLarge(),
                 'TwitterCard' => !empty($this->TwitterCard) ?
-                                            $this->TwitterCard :
-                                            $site_config->TwitterCard,
+                            $this->TwitterCard :
+                            $site_config->TwitterCard,
                 'TwitterTitle' => (!empty($this->TwitterTitle) ?
-                                            $this->TwitterTitle :
-                                            $this->Title) . " - {$site_config->Title}",
+                            $this->TwitterTitle :
+                            $this->Title) . " - {$site_config->Title}",
                 'TwitterDescription' => !empty($this->TwitterDescription) ?
-                                            $this->TwitterDescription :
-                                            $site_config->TwitterDescription,
+                            $this->TwitterDescription :
+                            $site_config->TwitterDescription,
                 'TwitterImageLarge' => !empty($this->TwitterImageLarge()->exists()) ?
-                                            $this->TwitterImageLarge() :
-                                            $site_config->TwitterImageLarge(),
+                            $this->TwitterImageLarge() :
+                            $site_config->TwitterImageLarge(),
                 'TwitterImage' => !empty($this->TwitterImage()->exists()) ?
-                                            $this->TwitterImage() :
-                                            $site_config->TwitterImage(),
+                            $this->TwitterImage() :
+                            $site_config->TwitterImage(),
             ];
 
             return ArrayData::create($data);

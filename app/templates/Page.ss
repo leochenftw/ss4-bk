@@ -20,6 +20,12 @@
         window.appInitialData = $InitialPageData.RAW;
     </script>
     <% end_if %>
+    <style>
+        #app {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
 </head>
 <body <% if $i18nScriptDirection %>dir="$i18nScriptDirection"<% end_if %>>
 $SiteConfig.GTMBody.RAW
