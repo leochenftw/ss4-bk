@@ -20,7 +20,7 @@ SilverStripe\Core\Injector\Injector:
       ErrorReporter: '%$LoggerBridgeDebugErrorReporter'
   Psr\Log\LoggerInterface:
     calls:
-      LogFileHandler: [ pushHandler, [ %$LogFileHandler ] ]
+      LogFileHandler: [ pushHandler, [ '%$LogFileHandler' ] ]
   LogFileHandler:
     class: Monolog\Handler\StreamHandler
     constructor:
@@ -43,4 +43,4 @@ SilverStripe\Core\Injector\Injector:
       - error
     properties:
       ContentType: text/html
-      Formatter: %$SilverStripe\Logging\DetailedErrorFormatter
+      Formatter: '%$SilverStripe\Logging\DetailedErrorFormatter'
