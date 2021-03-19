@@ -800,16 +800,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php",
-            "version": "8.12.19",
+            "version": "8.12.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php.git",
-                "reference": "f3c196dcb3e76e456783a38bab87d99b4d727918"
+                "reference": "743585979ef96f2be123518c0a58083cf678bd47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/f3c196dcb3e76e456783a38bab87d99b4d727918",
-                "reference": "f3c196dcb3e76e456783a38bab87d99b4d727918",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php/zipball/743585979ef96f2be123518c0a58083cf678bd47",
+                "reference": "743585979ef96f2be123518c0a58083cf678bd47",
                 "shasum": ""
             },
             "require": {
@@ -869,7 +869,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php"
             },
-            "time": "2021-03-01T16:07:56+00:00"
+            "time": "2021-03-17T11:05:55+00:00"
         },
         {
             "name": "giggsey/locale",
@@ -1644,12 +1644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/leochenftw/ss-arsenal.git",
-                "reference": "0ccc7836fe699011ab5d81df08afe456b07ddc9b"
+                "reference": "d20f5849c05105982cf1175cc46ebb2ac3366698"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/leochenftw/ss-arsenal/zipball/0ccc7836fe699011ab5d81df08afe456b07ddc9b",
-                "reference": "0ccc7836fe699011ab5d81df08afe456b07ddc9b",
+                "url": "https://api.github.com/repos/leochenftw/ss-arsenal/zipball/d20f5849c05105982cf1175cc46ebb2ac3366698",
+                "reference": "d20f5849c05105982cf1175cc46ebb2ac3366698",
                 "shasum": ""
             },
             "require": {
@@ -1699,7 +1699,7 @@
                 "issues": "https://github.com/leochenftw/ss-arsenal/issues",
                 "source": "https://github.com/leochenftw/ss-arsenal/tree/master"
             },
-            "time": "2021-03-14T02:59:49+00:00"
+            "time": "2021-03-18T09:19:09+00:00"
         },
         {
             "name": "littlegiant/silverstripe-seo-editor",
@@ -3787,16 +3787,16 @@
         },
         {
             "name": "symbiote/silverstripe-queuedjobs",
-            "version": "4.6.3",
+            "version": "4.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symbiote/silverstripe-queuedjobs.git",
-                "reference": "f17405ecdb662ff46c3d7149c70412565b753287"
+                "reference": "ffcee0591542da3c07dcaa62989b92039a59350f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symbiote/silverstripe-queuedjobs/zipball/f17405ecdb662ff46c3d7149c70412565b753287",
-                "reference": "f17405ecdb662ff46c3d7149c70412565b753287",
+                "url": "https://api.github.com/repos/symbiote/silverstripe-queuedjobs/zipball/ffcee0591542da3c07dcaa62989b92039a59350f",
+                "reference": "ffcee0591542da3c07dcaa62989b92039a59350f",
                 "shasum": ""
             },
             "require": {
@@ -3845,9 +3845,9 @@
             ],
             "support": {
                 "issues": "https://github.com/symbiote/silverstripe-queuedjobs/issues",
-                "source": "https://github.com/symbiote/silverstripe-queuedjobs/tree/4.6.3"
+                "source": "https://github.com/symbiote/silverstripe-queuedjobs/tree/4.6.4"
             },
-            "time": "2021-01-15T00:59:43+00:00"
+            "time": "2021-03-14T22:41:26+00:00"
         },
         {
             "name": "symfony/cache",
