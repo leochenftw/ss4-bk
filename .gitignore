@@ -14,6 +14,4 @@ public/_resources/
 silverstripe.log
 public/assets
 node_modules
-yarn.lock
 app/client/dist/
-package-lock.json
