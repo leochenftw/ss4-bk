@@ -50,7 +50,7 @@ class Page extends SiteTree implements Flushable
         $siteconfig = SiteConfig::current_site_config();
         $data = [
             'id' => $this->ID,
-            'navigation' => $this->get_menu_items(),
+            'navigation' => $this->getMenuItems(),
             'title' => ($this instanceof HomePage) ? SiteConfig::current_site_config()->Title : (!empty($this->MetaTitle) ? $this->MetaTitle : $this->Title),
             'content' => Util::preprocess_content($this->Content),
             'pagetype' => ClassInfo::shortName($this->ClassName),
@@ -89,7 +89,7 @@ class Page extends SiteTree implements Flushable
         return $this->get_ancestors($item->Parent(), $ancestors);
     }
 
-    private function get_menu_items($nav = null)
+    private function getMenuItems($nav = null)
     {
         $controller = Controller::curr();
         $controller = !$controller->hasMethod('getMenu') ? PageController::create() : $controller;
@@ -102,7 +102,7 @@ class Page extends SiteTree implements Flushable
                 'label' => $item->Title,
                 'url' => $link,
                 'active' => $item->isSection() || $item->isCurrent(),
-                'sub' => $this->get_menu_items($item->Children()),
+                'sub' => $this->getMenuItems($item->Children()),
                 'pagetype' => ClassInfo::shortName($item->ClassName),
             ];
         }
