@@ -29,7 +29,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "lodash": "^4.17.20",
     "mini-css-extract-plugin": "^0.11.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "postcss-loader": "^4.0.1",
     "pristinejs": "^0.1.9",
     "regenerator-runtime": "^0.13.7",
