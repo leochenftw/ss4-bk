@@ -15,3 +15,6 @@ silverstripe.log
 public/assets
 node_modules
 app/client/dist/
+
+.graphql-generated/
+public/_graphql/
